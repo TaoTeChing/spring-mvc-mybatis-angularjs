@@ -1,0 +1,42 @@
+package com.crell.common.service.impl;
+
+import com.crell.common.model.Dictionary;
+import com.crell.common.service.BaseDataSer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Administrator on 2016/1/11.
+ */
+@Service
+public class BaseDataSerImpl implements BaseDataSer{
+
+    @Autowired
+    RedisTemplate redis;
+
+    public List<Dictionary> getListByType(String type) {
+        List<Dictionary> dictList = new ArrayList<Dictionary>();
+        Dictionary dict = null;
+        BoundHashOperations boundHashOperations = redis.boundHashOps(type);
+
+        Map<String,String> map = boundHashOperations.entries();
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            dict = new Dictionary();
+            dict.setCode(entry.getKey());
+            dict.setName(entry.getValue());
+            dictList.add(dict);
+        }
+        //取出为map无序，此处排序
+        //Collections.sort(dictList);
+
+        return dictList;
+    }
+}

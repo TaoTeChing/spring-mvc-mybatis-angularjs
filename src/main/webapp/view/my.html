@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="page-header">
+        <h1>欢迎 <span ng-bind="loginInfo.info"></span></h1>
+    </div>
+    <div ng-show="!loginInfo ? false : !loginInfo.hasLogin" class="jumbotron">
+        <button type="button" class="btn btn-danger">注册</button>
+        <button type="button" class="btn btn-success" ng-click="toLogin()">登录</button>
+    </div>
+    <div ng-show="!loginInfo ? false : loginInfo.hasLogin" class="jumbotron">
+        <button type="button" class="btn btn-success" ng-click="toLogoff()">注销</button>
+    </div>
+</div>
