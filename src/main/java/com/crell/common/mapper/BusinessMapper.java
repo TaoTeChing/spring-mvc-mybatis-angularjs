@@ -20,4 +20,6 @@ public interface BusinessMapper {
     Boolean del(@Param("businessId") String businessId);
 
     List<Business> getBusinessList(Page page);
+
+    Business getBusinessById(@Param("businessId") String businessId);
 }

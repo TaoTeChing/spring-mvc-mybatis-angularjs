@@ -1,7 +1,11 @@
 package com.crell.core.interceptor;
 
+import com.crell.common.model.User;
 import com.crell.common.service.UserSer;
+import com.crell.core.constant.Context;
 import com.crell.core.dto.ReturnBody;
+import com.crell.core.util.IpUtil;
+import com.crell.core.util.SystemUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,16 +29,23 @@ public class SessionSecurityInterceptor implements HandlerInterceptor {
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //请求url
         String requestUrl = request.getRequestURI().replace(request.getContextPath(), "");
-
-        ReturnBody rbody = new ReturnBody();
+        //session中取当前用户session
+        User user = (User)request.getSession().getAttribute(Context.USER);
+        String ipAddr = IpUtil.getIpAddr(request);
 
         if (null != allowUrls && allowUrls.length >= 1) {
-            for (String url : allowUrls) {
-                if (requestUrl.contains(url)) {
-                    return true;
-                }
-            }
+
+        }
+        if(user!=null){
+            user.setIp(ipAddr);
+            SystemUtil.setUser(user);
+        }else if(requestUrl.contains("/login")){
+            user = new User();
+            user.setUserName(request.getParameter("userName"));
+            user.setIp(ipAddr);
+            SystemUtil.setUser(user);
         }
         return true;
     }

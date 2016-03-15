@@ -12,6 +12,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from tuser where nickName = #{nickName}
 	</select>
 
+	<insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+		insert into tuser <include refid="UserSet" />
+	</insert>
+
+	<update id="update" parameterType="User" >
+		UPDATE tuser <include refid="UserSet" /> WHERE userId = #{userId}
+	</update>
+
+	<delete id="del" parameterType="string">
+		DELETE FROM tuser WHERE userId = #{userId}
+	</delete>
+
 	<sql id="UserSet">
 		<set >
 			<if test= "userName != null">userName=#{userName,jdbcType=VARCHAR},</if >

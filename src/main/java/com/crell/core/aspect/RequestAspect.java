@@ -7,6 +7,7 @@ import com.crell.core.constant.Context;
 import com.crell.core.constant.ResponseState;
 import com.crell.core.dto.ParamsBody;
 import com.crell.core.dto.ReturnBody;
+import com.crell.core.util.LogUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -35,7 +36,7 @@ import java.util.Map;
 @Aspect
 public class RequestAspect {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    //Logger logger = LoggerFactory.getLogger(this.getClass());
 
     //定义切入点
     @SuppressWarnings("unused")
@@ -86,7 +87,7 @@ public class RequestAspect {
                     User sessionUser = (User) session.getAttribute(Context.USER);
                     if(sessionUser == null){
                         returnbody.setStatus(ResponseState.INVALID_USER);
-                        logger.info(method.getName() + "用户未登录，跳转登录页");
+                        LogUtil.error(method.getName() + "用户未登录，跳转登录页");
                         return returnbody;
                     }
                 }
@@ -99,7 +100,7 @@ public class RequestAspect {
                         if(StringUtils.isEmpty(keyValue)){
                             returnbody.setStatus(ResponseState.FAILED);
                             returnbody.setMsg(method.getName() + "入参" + filed + "值为空");
-                            logger.error(method.getName() + "入参" + filed + "值为空");
+                            LogUtil.error(method.getName() + "入参" + filed + "值为空");
                             return returnbody;
                         }
                     }

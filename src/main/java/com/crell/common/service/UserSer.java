@@ -13,4 +13,10 @@ public interface UserSer {
     public User selectByNickName(String nickName);
 
     public int updateToken(String userId, String token);
+
+    public int addUser(User user);
+
+    Boolean update(User user);
+
+    Boolean del(String userId);
 }

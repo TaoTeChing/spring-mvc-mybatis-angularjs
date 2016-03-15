@@ -20,8 +20,7 @@
             "random" : Math.random(),
             "body" : {
                 "name" : "百联",
-                "age" : "11",
-                "code": "1"
+                "age" : "11"
             }
         };
 
@@ -74,7 +73,7 @@
 
         $.ajax({
             type : "GET",
-            url : "/ajax/business/getBusinessList",
+            url : "/ajax/business/list",
             dataType : "json",
             success : function(obj) {
                 if(obj.status=="1001") {

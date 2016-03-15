@@ -25,4 +25,16 @@ public class UserSerImpl implements UserSer {
     public User selectByNickName(String nickName) {
         return mapper.selectByNickName(nickName);
     }
+
+    public int addUser(User user){
+        return mapper.insertUser(user);
+    }
+
+    public Boolean update(User user) {
+        return mapper.update(user);
+    }
+
+    public Boolean del(String userId) {
+        return mapper.del(userId);
+    }
 }

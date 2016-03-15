@@ -39,6 +39,8 @@ app.factory('LoginService',['$q','$http',function($q,$http){
                 loginInfo.info = $.cookie('nickName');
                 loginInfo.hasLogin = true;
                 loginInfo.loginerror = false;
+            }else{
+                location.href = '/login';
             }
             return loginInfo;
         },
@@ -60,17 +62,37 @@ app.factory('LoginService',['$q','$http',function($q,$http){
         }
     }
 }])
+.factory("RegisterService",['$q','$http','BaseService',function($q,$http,BaseService){
+    return{
+        register : function(condition){
+            return BaseService.post('/ajax/user',condition);
+        },
+        modifyUser : function(condition){
+            return BaseService.put('/ajax/user',condition);
+        },
+        deleteUser : function(condition){
+            return BaseService.delete('/ajax/user',condition);
+        },
+        remoteValid : function(userName){
+            var deferred = $q.defer();
+            $http.post('/ajax/user/validUserName',{'userName':userName}).success(function(data){
+                deferred.resolve(data);
+            });
+            return deferred.promise;
+        }
+    }
+}])
 .factory("BusinessService",['BaseService',function(BaseService){
     return{
         getBusinessList : function(condition,page){
-            return BaseService.post('/ajax/business/getBusinessList',condition,page);
+            return BaseService.get('/ajax/business',condition,page);
         }
     }
 }])
 .factory("UserService",['BaseService',function(BaseService){
     return{
         userValid : function(userName){
-            return BaseService.post('/ajax/validUserName',{'userName':userName});
+            return BaseService.post('/ajax/user/validUserName',{'userName':userName});
         }
     }
 }]);

@@ -8,6 +8,7 @@ import com.crell.core.constant.ResponseState;
 import com.crell.core.controller.AbstractController;
 import com.crell.core.dto.ReturnBody;
 import com.crell.core.util.EncryptUtil;
+import com.crell.core.util.LogUtil;
 import com.crell.core.util.ParameterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
@@ -31,6 +32,9 @@ public class LoginController extends AbstractController {
 
     @Autowired
     UserSer userSer;
+
+    @Autowired
+    LogUtil logUtil;
 
     @RequestMapping(value = {"/login"},method = RequestMethod.POST)
     @ResponseBody
@@ -57,6 +61,8 @@ public class LoginController extends AbstractController {
 
                 HttpSession session = request.getSession();
                 session.setAttribute(Context.USER, user);
+
+                logUtil.action("用户登录","用户名:"+user.getUserName());
             }
         }else{
             rbody.setStatus(ResponseState.FAILED);

@@ -14,7 +14,7 @@ import java.util.Properties;
  */
 public class PropertiesUtil {
 
-	private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
+	//private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
 
 	public static String getProperty(String fileName, String key) throws IOException {
 		Properties prop = new Properties();
@@ -30,17 +30,17 @@ public class PropertiesUtil {
 		try {
 			is = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			logger.error(e.getMessage());
+			LogUtil.error(e.getMessage(),e);
 		}
 		try {
 			prop.load(is);
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			LogUtil.error(e.getMessage(),e);
 		}finally{
 			try {
 				is.close();
 			} catch (IOException e) {
-				logger.error(e.getMessage());
+				LogUtil.error(e.getMessage(),e);
 			}
 		}
 	}

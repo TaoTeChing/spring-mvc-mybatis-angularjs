@@ -1,7 +1,10 @@
 package com.crell.common.controller;
 
 import com.crell.common.model.Business;
+import com.crell.common.model.User;
 import com.crell.common.service.BusinessSer;
+import com.crell.core.annotation.NotNull;
+import com.crell.core.constant.Context;
 import com.crell.core.constant.ResponseState;
 import com.crell.core.controller.AbstractController;
 import com.crell.core.dto.Page;
@@ -28,11 +31,11 @@ public class BusinessController extends AbstractController {
     @Autowired
     BusinessSer businessSer;
 
-    @RequestMapping(value = {"/business/getBusinessList"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/business/list"},method = RequestMethod.POST)
     @ResponseBody
     public ReturnBody getBusinessList(@RequestBody ParamsBody paramsBody,HttpServletRequest request){
         ReturnBody rbody = new ReturnBody();
-        Page page = businessSer.getBusinessList(paramsBody.getBody(),paramsBody.getPage());
+        Page page = businessSer.getBusinessList(paramsBody.getBody(), paramsBody.getPage());
         List<Business> businessList = page.getResults();
 
         rbody.setStatus(ResponseState.SUCCESS);
@@ -42,4 +45,30 @@ public class BusinessController extends AbstractController {
         return rbody;
     }
 
+    @RequestMapping(value = {"/business/{businessId}/list"},method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnBody getBusinessById(@RequestBody ParamsBody paramsBody,@PathVariable("businessId") String businessId,HttpServletRequest request){
+        ReturnBody rbody = new ReturnBody();
+        Business business = businessSer.getBusinessById(businessId);
+
+        rbody.setStatus(ResponseState.SUCCESS);
+        rbody.setData(business);
+
+        return rbody;
+    }
+
+    @RequestMapping(value = {"/business"},method = RequestMethod.POST)
+    @NotNull(value = "gameName",user = true)
+    public ReturnBody add(Business business,HttpServletRequest request){
+        ReturnBody rbody = new ReturnBody();
+        User user = (User)request.getSession().getAttribute(Context.USER);
+
+        business.setCreateDate(new Date());
+        business.setCreator(user.getUserId());
+        businessSer.add(business);
+
+        rbody.setStatus(ResponseState.SUCCESS);
+        rbody.setData(business);
+        return rbody;
+    }
 }

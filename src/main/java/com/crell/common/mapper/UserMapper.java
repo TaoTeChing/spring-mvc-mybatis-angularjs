@@ -32,4 +32,15 @@ public interface UserMapper {
      * @return
      */
     int updateToken(@Param("userId") String userId, @Param("token") String token);
+
+    /**
+     * 插入用户
+     * @param user
+     * @return int
+     */
+    int insertUser(User user);
+
+    Boolean update(User user);
+
+    Boolean del(@Param("userId") String userId);
 }

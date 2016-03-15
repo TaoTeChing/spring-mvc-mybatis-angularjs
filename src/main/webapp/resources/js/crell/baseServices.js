@@ -3,13 +3,34 @@
  */
 app.factory("BaseService",['$http',function($http){
     return{
-        post : function(url,params,page){
+        post : function(url,params){
+            var paramsBody = {};
+            paramsBody.token = $.cookie('token');
+            paramsBody.random = Math.random();
+            paramsBody.body = params;
+            return $http.post(url,paramsBody);
+        },
+        delete : function(url,params){
+            var paramsBody = {};
+            paramsBody.token = $.cookie('token');
+            paramsBody.random = Math.random();
+            paramsBody.body = params;
+            return $http.post(url,paramsBody);
+        },
+        put : function(url,params){
+            var paramsBody = {};
+            paramsBody.token = $.cookie('token');
+            paramsBody.random = Math.random();
+            paramsBody.body = params;
+            return $http.put(url,paramsBody);
+        },
+        get : function(url,params,page){
             var paramsBody = {};
             paramsBody.token = $.cookie('token');
             paramsBody.random = Math.random();
             paramsBody.body = params;
             paramsBody.page = page;
-            return $http.post(url,paramsBody);
+            return $http.post(url+'/list',paramsBody);
         }
     }
 }]);

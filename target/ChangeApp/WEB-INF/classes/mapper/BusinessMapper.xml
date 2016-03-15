@@ -48,4 +48,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test= "params.gameTypeCode != null"> AND gameTypeCode = #{params.gameTypeCode} </if >
 	</select>
 
+	<select id="getBusinessById" parameterType="string" resultType="Business">
+		select gameName,maker,price,location,img,createDate
+		from tbusiness
+		WHERE BUSINESSID = #{businessId}
+	</select>
+
 </mapper>

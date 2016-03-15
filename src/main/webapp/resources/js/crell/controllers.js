@@ -58,9 +58,6 @@ app.controller('RouteMainCtl',['$scope','$location','BusinessService',function($
         };
 }])
 .controller('RouteMyCtl',['$scope','$location','LoginService','UserService',function($scope,$location,LoginService,UserService) {
-        UserService.userValid('').then(function(data){
-
-        });
 
         var loginInfo = LoginService.getLoginInfo();
         $scope.loginInfo = loginInfo;
@@ -73,6 +70,53 @@ app.controller('RouteMainCtl',['$scope','$location','BusinessService',function($
             LoginService.logOff();
         };
 
+}])
+.controller('RouteRegisterCtl',['$scope','RegisterService',function($scope,RegisterService){
+
+    $scope.register = function(){
+        if($scope.checkMatch()) {
+            RegisterService.register($scope.form).then(function(obj) {
+                if(obj.data.status == Status.SUCCESS){
+                    var loginInfo = obj.data.data;
+
+                    $.cookie('userName',loginInfo.userName,{expires: 7});
+                    $.cookie('nickName',loginInfo.nickName,{expires: 7});
+                    location.href = '/my';
+                }
+            });
+        }else{
+            angular.forEach($scope.registerForm,function(e){
+                if(typeof(e) == 'object' && typeof(e.$dirty) == 'boolean'){
+                    e.$dirty = true;
+                }
+            });
+        }
+    }
+
+    $scope.validExists = function(){
+        if($scope.form.userName){
+            RegisterService.remoteValid($scope.form.userName).then(function(data) {
+                if(data.status == Status.SUCCESS){
+                    return true;
+                }
+            });
+        }
+        return false;
+    };
+
+    $scope.checkMatch = function(){
+        var form = $scope.form;
+        if(form.password && form.passwordConfirm ){
+            if(form.password != form.passwordConfirm){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    $scope.changeCaptcha = function($event) {//生成验证码
+        $event.target.src = '/ajax/captcha-image?' + Math.floor(Math.random()*100);
+    };
 }])
 .controller('MainController',['$scope','$location','LoginService',function($scope,$location,LoginService) {
 

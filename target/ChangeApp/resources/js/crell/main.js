@@ -52,11 +52,18 @@ var app = angular.module('mainApp', ['ngRoute'])
             templateUrl: 'view/my.html',
             controller: 'RouteMyCtl'
         })
+        .when('/register', {
+            templateUrl: 'view/register.html',
+            controller: 'RouteRegisterCtl'
+        })
         .otherwise({
             redirectTo: '/'
         });
 }]);
 
+/****
+ * 滚动分页
+ */
 app.directive('whenScrolled', function() {
     return function(scope, element, attr) {
         var raw = element[0];

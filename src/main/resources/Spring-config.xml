@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
@@ -13,7 +13,9 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd">
     <!-- Activates annotation-based bean configuration -->
     <context:annotation-config />
 
@@ -21,6 +23,9 @@
     <context:component-scan base-package="com.crell.*" />
 
     <aop:aspectj-autoproxy />
+
+    <!-- 启用缓存注解功能 -->
+    <cache:annotation-driven cache-manager="cacheManager" />
 
     <!-- 数据库配置文件位置 -->
     <context:property-placeholder location="classpath:jdbc.properties" />
@@ -37,6 +42,21 @@
         <property name="maxActive" value="${jdbc.maxActive}" />    <!-- 最大活跃数 -->
         <property name="initialSize" value="${jdbc.initialSize}" /><!--
             初始大小 -->
+    </bean>
+
+    <!-- 导入mongodb的配置文件 -->
+    <import resource="mongodb-config.xml"/>
+
+    <!-- spring缓存切换redis做缓存 -->
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean class="com.crell.core.interceptor.RedisCache">
+                    <property name="redisTemplate" ref="redisTemplate" />
+                    <property name="name" value="default"/>
+                </bean>
+            </set>
+        </property>
     </bean>
 
     <!-- spring data redis -->
@@ -83,6 +103,30 @@
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.crell.common.mapper" />
+    </bean>
+
+    <!--验证码配置-->
+    <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+        <property name="config">
+            <bean class="com.google.code.kaptcha.util.Config">
+                <constructor-arg>
+                    <props>
+                        <prop key="kaptcha.border">no</prop>
+                        <prop key="kaptcha.border.color">200,255,214</prop>
+                        <prop key="kaptcha.textproducer.font.color">red</prop>
+                        <prop key="kaptcha.image.width">250</prop>
+                        <prop key="kaptcha.textproducer.font.size">80</prop>
+                        <prop key="kaptcha.image.height">90</prop>
+                        <prop key="kaptcha.session.key">code</prop>
+                        <prop key="kaptcha.textproducer.char.length">4</prop>
+                        <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
+                        <prop key="kaptcha.background.clear.from">255,255,255</prop>
+                        <prop key="kaptcha.background.clear.to">255,255,255</prop>
+                        <prop key="kaptcha.noise.color">0,0,0</prop>
+                    </props>
+                </constructor-arg>
+            </bean>
+        </property>
     </bean>
 
 </beans>

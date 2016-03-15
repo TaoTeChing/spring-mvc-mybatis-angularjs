@@ -2,6 +2,7 @@ package com.crell.common.service.impl;
 
 import com.crell.common.service.TestSer;
 import com.crell.core.dto.Page;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,14 +20,13 @@ public class TestSerImpl implements TestSer {
     }
 
     public String testException() throws Exception {
-        String str = "";
-        str = "ex";
-        if ("ex".equals(str)){
+        if (true){
             throw new Exception("service报错");
         }
         return null;
     }
 
+    //@Cacheable(value="default")  测试，spring redis cache。"default" 为配置的cacheManager的名称，可配多个
     public List<String> testPage(Map<String, Object> body, Page page) {
         List<String> list = new ArrayList<String>();
         int pageNo = page.getPageNo();

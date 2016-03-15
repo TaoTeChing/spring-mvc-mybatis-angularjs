@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class EncryptUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(EncryptUtil.class);
+    //private static Logger logger = LoggerFactory.getLogger(EncryptUtil.class);
 
     private static final String ALGORITHM_MD5 = "MD5";
 
@@ -33,10 +33,10 @@ public class EncryptUtil {
             keys = bytesToHexString(md.digest());
         }
         catch (NoSuchAlgorithmException aex) {
-            logger.error("there is no " + ALGORITHM_MD5 + " Algorithm!");
+            LogUtil.error("there is no " + ALGORITHM_MD5 + " Algorithm!");
         }
         catch (java.io.UnsupportedEncodingException uex) {
-            logger.error("can not encode the password - " + uex.getMessage());
+            LogUtil.error("can not encode the password - " + uex.getMessage());
         }
         return keys;
     }

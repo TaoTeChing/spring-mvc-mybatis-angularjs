@@ -38,4 +38,8 @@ public class BusinessSerImpl implements BusinessSer {
         page.setResults(results);
         return page;
     }
+
+    public Business getBusinessById(String businessId) {
+        return businessMapper.getBusinessById(businessId);
+    }
 }

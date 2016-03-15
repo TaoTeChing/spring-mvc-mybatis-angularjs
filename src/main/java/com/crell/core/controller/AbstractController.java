@@ -7,6 +7,7 @@ import com.crell.core.expection.ErrorException;
 import com.crell.core.expection.FailedException;
 import com.crell.core.expection.InvalidUserException;
 import com.crell.core.expection.ParamsNullException;
+import com.crell.core.util.LogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +34,7 @@ public class AbstractController {
     @ResponseBody
     public ReturnBody exp(HttpServletRequest request, Exception exception){
 
-        Logger logger = LoggerFactory.getLogger(this.getClass());
+        //Logger logger = LoggerFactory.getLogger(this.getClass());
 
         ReturnBody rbody = new ReturnBody();
         if(exception instanceof InvalidUserException){
@@ -42,15 +43,15 @@ public class AbstractController {
             rbody.setStatus(ResponseState.FAILED);
             rbody.setMsg(exception.getMessage());
         }else if(exception instanceof ParamsNullException){
-            logger.error(request.getServletPath() + ":" + exception.getMessage(),exception);
+            LogUtil.error(request.getServletPath() + ":" + exception.getMessage(), exception);
             rbody.setStatus(ResponseState.FAILED);
             rbody.setMsg(ExceptionCode.SYSTEM_ERROR);
         }else if(exception instanceof ErrorException){
-            logger.error(request.getServletPath() + ":" + exception.getMessage(),exception);
+            LogUtil.error(request.getServletPath() + ":" + exception.getMessage(),exception);
             rbody.setStatus(ResponseState.ERROR);
             rbody.setMsg(ExceptionCode.SYSTEM_ERROR);
         }else{
-            logger.error(request.getServletPath() + ":" + exception.getMessage(),exception);
+            LogUtil.error(request.getServletPath() + ":" + exception.getMessage(),exception);
             rbody.setStatus(ResponseState.ERROR);
             rbody.setMsg(ExceptionCode.SYSTEM_ERROR);
         }
