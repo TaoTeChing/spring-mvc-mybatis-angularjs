@@ -14,6 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 
+/**
+ * 验证码
+ *
+ * @Author crell
+ * @Date 2016/1/8 16:33
+ */
 @RestController
 public class CaptchaController extends AbstractController{
     private Producer captchaProducer = null;

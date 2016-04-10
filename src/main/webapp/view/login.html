@@ -9,14 +9,13 @@
             <input type="checkbox" ng-model="form.isRemember"> Remember me
         </label>
     </div>
-    <div class="alert alert-danger" role="alert" ng-show="!loginForm.$valid">
+    <div class="alert alert-danger" role="alert" ng-show="loginForm.userName.$invalid">
         <span ng-show="loginForm.userName.$dirty && loginForm.userName.$error.required"><span>请输入邮箱</span></span>
         <span ng-show="loginForm.userName.$dirty && loginForm.userName.$error.email"><span>邮箱格式不正确</span></span>
-        <span ng-show="loginForm.password.$dirty && loginForm.password.$error.required"><span>请输入密码</span></span>
     </div>
     <div class="alert alert-warning" role="alert" ng-show="loginInfo.loginerror">
         <strong>Warning! </strong><span ng-bind="loginInfo.loginerroinfo"></span>
     </div>
 </form>
 <button class="btn btn-lg btn-primary btn-block" ng-click="login(loginForm.$valid)">登录</button>
-<div><a href="http://localhost:8080/register">免费注册</a></div>
+<div><a href="http://crell.nat123.net/register">免费注册</a></div>

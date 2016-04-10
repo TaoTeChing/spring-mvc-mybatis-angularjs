@@ -53,7 +53,13 @@
             <set>
                 <bean class="com.crell.core.interceptor.RedisCache">
                     <property name="redisTemplate" ref="redisTemplate" />
-                    <property name="name" value="default"/>
+                    <property name="cacheTime" value="${redis.cache30m}"/>
+                    <property name="name" value="cache30m"/>
+                </bean>
+                <bean class="com.crell.core.interceptor.RedisCache">
+                    <property name="redisTemplate" ref="redisTemplate" />
+                    <property name="cacheTime" value="${redis.cache2h}"/>
+                    <property name="name" value="cache2h"/>
                 </bean>
             </set>
         </property>
@@ -104,6 +110,33 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.crell.common.mapper" />
     </bean>
+
+    <!-- 使用JDBC事物 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!--
+    配置AOP切面
+    <aop:config>
+    <aop:pointcut id="transactionPointcut" expression="execution(* com.crell..common.service.*.*(..))"/>
+    <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
+    </aop:config>
+
+    AOP配置事物
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="query*" read-only="true"/>
+            <tx:method name="delete*"  propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+    -->
+
+    <!-- 使用annotation注解方式配置事务 @Transactional -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
 
     <!--验证码配置-->
     <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">

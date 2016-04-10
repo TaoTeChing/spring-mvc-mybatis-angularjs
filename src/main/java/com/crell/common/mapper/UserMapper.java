@@ -43,4 +43,18 @@ public interface UserMapper {
     Boolean update(User user);
 
     Boolean del(@Param("userId") String userId);
+
+    /**
+     * 根据用户id获取用户
+     * @param userId
+     * @return User
+     */
+    User selectById(String userId);
+
+    /**
+     * 保存登录信息
+     * @param user
+     * @return Boolean
+     */
+    Boolean setLoginInfo(User user);
 }

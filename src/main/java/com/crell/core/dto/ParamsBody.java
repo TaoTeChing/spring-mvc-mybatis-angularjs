@@ -13,6 +13,8 @@ public class ParamsBody{
 	
 	private Integer random;//随机数
 
+	private Long timestamp;//时间戳
+
 	private Page page;//分页对象
 
 	private Map<String,Object> body;//参数
@@ -31,6 +33,14 @@ public class ParamsBody{
 
 	public void setRandom(Integer random) {
 		this.random = random;
+	}
+
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public Page getPage() {

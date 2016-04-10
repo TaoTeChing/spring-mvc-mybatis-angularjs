@@ -1,5 +1,11 @@
 package com.crell.core.dto;
 
+/**
+ * 系统日志，记录行为日志
+ *
+ * @Author crell
+ * @Date 2016/3/18 16:13
+ */
 public class SystemLog {
 	private String id;//编号
     private String userName;//用户名

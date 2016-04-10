@@ -1,9 +1,7 @@
 package com.crell.core.aspect;
 
-import com.crell.common.model.User;
 import com.crell.core.annotation.BodyFormat;
 import com.crell.core.annotation.NotNull;
-import com.crell.core.constant.Context;
 import com.crell.core.constant.ResponseState;
 import com.crell.core.dto.ParamsBody;
 import com.crell.core.dto.ReturnBody;
@@ -13,13 +11,12 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -35,6 +32,9 @@ import java.util.Map;
 @Component("requestAspect")
 @Aspect
 public class RequestAspect {
+
+    @Autowired
+    RedisTemplate redis;
 
     //Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -77,18 +77,34 @@ public class RequestAspect {
                 ReturnBody returnbody = new ReturnBody();
 
                 if(user){
-                    HttpServletRequest request = null;
-                    for (int j = 0; j < args.length; j++) {
-                        if(args[j] instanceof HttpServletRequest){
-                            request = (HttpServletRequest)args[j];
-                        }
-                    }
-                    HttpSession session = request.getSession();
-                    User sessionUser = (User) session.getAttribute(Context.USER);
-                    if(sessionUser == null){
-                        returnbody.setStatus(ResponseState.INVALID_USER);
-                        LogUtil.error(method.getName() + "用户未登录，跳转登录页");
+                    if(StringUtils.isEmpty(paramsBody.getToken())){
+                        returnbody.setStatus(ResponseState.INVALID_TOKEN);
+                        returnbody.setMsg( "入参token为空");
+                        LogUtil.error(method.getName() + "入参token为空");
                         return returnbody;
+                    }else if(StringUtils.isEmpty(paramsBody.getTimestamp())){
+                        returnbody.setStatus(ResponseState.INVALID_TOKEN);
+                        returnbody.setMsg( "入参timestamp为空");
+                        LogUtil.error(method.getName() + "入参timestamp为空");
+                        return returnbody;
+                    }else{
+                        BoundHashOperations<String, String, String> userToken = redis.boundHashOps("userToken");
+                        String token = userToken.get(paramsBody.getToken());
+                        if(StringUtils.isEmpty(token)){
+                            returnbody.setStatus(ResponseState.INVALID_TOKEN);
+                            returnbody.setMsg( "无效token");
+                            LogUtil.error(method.getName() + "无效token");
+                            return returnbody;
+                        }else{
+                            long token_time = Long.parseLong(token.split(",")[1]);
+                            long timestamp = paramsBody.getTimestamp();
+                            if(timestamp > token_time){
+                                returnbody.setStatus(ResponseState.INVALID_TOKEN);
+                                returnbody.setMsg( "token过期");
+                                LogUtil.error(method.getName() + "token过期，失效");
+                                return returnbody;
+                            }
+                        }
                     }
                 }
 
@@ -99,15 +115,11 @@ public class RequestAspect {
                         keyValue = params.get(filed);
                         if(StringUtils.isEmpty(keyValue)){
                             returnbody.setStatus(ResponseState.FAILED);
-                            returnbody.setMsg(method.getName() + "入参" + filed + "值为空");
+                            returnbody.setMsg("入参" + filed + "值为空");
                             LogUtil.error(method.getName() + "入参" + filed + "值为空");
                             return returnbody;
                         }
                     }
-                }else{
-                    returnbody.setStatus(ResponseState.FAILED);
-                    returnbody.setMsg(method.getName() + "入参为空");
-                    return returnbody;
                 }
 
 //                Class clazz = ParamsBody.class;

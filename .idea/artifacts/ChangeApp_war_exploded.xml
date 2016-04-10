@@ -58,6 +58,9 @@
           <element id="library" level="project" name="Maven: org.mongodb:mongo-java-driver:3.0.4" />
           <element id="library" level="project" name="Maven: com.github.axet:kaptcha:0.0.9" />
           <element id="library" level="project" name="Maven: com.jhlabs:filters:2.0.235" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.4.1" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.1" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
         </element>
       </element>
       <element id="directory" name="META-INF">

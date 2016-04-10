@@ -12,8 +12,6 @@ public class ReturnBody {
 
     private String msg;//返回消息
 
-    private String redirectUrl;//重定向url
-
     private Object data;//返回数据
 
     private int pages;//分页-页数
@@ -32,14 +30,6 @@ public class ReturnBody {
 
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public String getRedirectUrl() {
-        return redirectUrl;
-    }
-
-    public void setRedirectUrl(String redirectUrl) {
-        this.redirectUrl = redirectUrl;
     }
 
     public Object getData() {

@@ -1,6 +1,5 @@
 package com.crell.common.controller;
 
-import com.crell.common.model.RegisterForm;
 import com.crell.common.model.User;
 import com.crell.common.service.UserSer;
 import com.crell.core.annotation.NotNull;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Map;
 
@@ -61,11 +59,11 @@ public class UserController extends AbstractController {
     @ResponseBody
     public ReturnBody newUser(@RequestBody ParamsBody paramsBody,HttpServletRequest request) throws Exception {
         ReturnBody rbody = new ReturnBody();
-        Map params = paramsBody.getBody();
-        String kaptcha = (String) params.get("kaptcha");
+        Map<String, Object> body = paramsBody.getBody();
+        String kaptcha = (String) body.get("kaptcha");
 
         User user = new User();
-        BeanUtils.populate(user,params);
+        BeanUtils.populate(user,body);
 
         if(!ValidUtil.validCaptcha(request, kaptcha)){
             rbody.setMsg(MessageCode.CAPTCHA_ERROR);

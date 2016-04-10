@@ -11,6 +11,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+/**
+ * 日志级别分类，异常日志，调试日志，性能日志，行为日志
+ *
+ * @Author crell
+ * @Date 2016/3/18 16:14
+ */
 @Component("logUtil")
 public class LogUtil {
 

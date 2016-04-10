@@ -25,7 +25,7 @@ public class RedisCache implements Cache {
 
 	private RedisTemplate<String, Object> redisTemplate;
 //	private String cacheTime = PropertyConfigurer.getContextProperty("redis.cacheTime");
-	private String cacheTime = "1800";//单位是秒
+	private String cacheTime;
 	private String name;
 
 	public RedisTemplate<String, Object> getRedisTemplate() {
@@ -42,6 +42,14 @@ public class RedisCache implements Cache {
 
 	public String getName() {
 		return this.name;
+	}
+
+	public String getCacheTime() {
+		return cacheTime;
+	}
+
+	public void setCacheTime(String cacheTime) {
+		this.cacheTime = cacheTime;
 	}
 
 	public Object getNativeCache() {

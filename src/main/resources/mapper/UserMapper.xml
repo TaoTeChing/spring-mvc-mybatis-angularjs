@@ -8,6 +8,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from tuser where userName = #{userName}
 	</select>
 
+	<select id="selectById" parameterType="string" resultType="User">
+		select * from tuser where userId = #{userId}
+	</select>
+
 	<select id="selectByNickName" parameterType="string" resultType="User">
 		select * from tuser where nickName = #{nickName}
 	</select>
@@ -40,6 +44,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<update id="updateToken" parameterType="String" >
 		update tuser set token=#{token} where userId=#{userId}
+	</update>
+
+	<update id="setLoginInfo" parameterType="User" >
+		update tuser set ip=#{ip},lastLoginDate=#{lastLoginDate} where userId=#{userId}
 	</update>
 
 </mapper>

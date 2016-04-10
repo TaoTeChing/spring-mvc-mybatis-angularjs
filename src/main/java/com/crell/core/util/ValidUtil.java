@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 校验工具类
- * Created by FunkySoya on 2015/5/7.
+ * Created by crell on 2015/12/7.
  */
 public class ValidUtil {
 

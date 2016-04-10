@@ -7,6 +7,7 @@ app.factory("BaseService",['$http',function($http){
             var paramsBody = {};
             paramsBody.token = $.cookie('token');
             paramsBody.random = Math.random();
+            paramsBody.timestamp = new Date();
             paramsBody.body = params;
             return $http.post(url,paramsBody);
         },
@@ -14,6 +15,7 @@ app.factory("BaseService",['$http',function($http){
             var paramsBody = {};
             paramsBody.token = $.cookie('token');
             paramsBody.random = Math.random();
+            paramsBody.timestamp = new Date();
             paramsBody.body = params;
             return $http.post(url,paramsBody);
         },
@@ -21,6 +23,7 @@ app.factory("BaseService",['$http',function($http){
             var paramsBody = {};
             paramsBody.token = $.cookie('token');
             paramsBody.random = Math.random();
+            paramsBody.timestamp = new Date();
             paramsBody.body = params;
             return $http.put(url,paramsBody);
         },
@@ -28,6 +31,7 @@ app.factory("BaseService",['$http',function($http){
             var paramsBody = {};
             paramsBody.token = $.cookie('token');
             paramsBody.random = Math.random();
+            paramsBody.timestamp = new Date();
             paramsBody.body = params;
             paramsBody.page = page;
             return $http.post(url+'/list',paramsBody);

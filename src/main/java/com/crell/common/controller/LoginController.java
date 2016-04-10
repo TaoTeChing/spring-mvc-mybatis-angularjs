@@ -1,25 +1,21 @@
 package com.crell.common.controller;
 
-import com.crell.common.dto.LoginForm;
 import com.crell.common.model.User;
 import com.crell.common.service.UserSer;
-import com.crell.core.constant.Context;
+import com.crell.core.annotation.NotNull;
 import com.crell.core.constant.ResponseState;
 import com.crell.core.controller.AbstractController;
+import com.crell.core.dto.ParamsBody;
 import com.crell.core.dto.ReturnBody;
 import com.crell.core.util.EncryptUtil;
+import com.crell.core.util.IpUtil;
 import com.crell.core.util.LogUtil;
-import com.crell.core.util.ParameterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -38,31 +34,29 @@ public class LoginController extends AbstractController {
 
     @RequestMapping(value = {"/login"},method = RequestMethod.POST)
     @ResponseBody
-    public ReturnBody login(@RequestBody LoginForm form,HttpServletRequest request, HttpServletResponse response,ModelMap modelMap){
+    public ReturnBody login(@RequestBody ParamsBody paramsBody,HttpServletRequest request, HttpServletResponse response){
         ReturnBody rbody = new ReturnBody();
+        Map<String, Object> body = paramsBody.getBody();
 
-        User user = userSer.selectByName(form.getUserName());
-        Map data = new HashMap();
+        User user = userSer.selectByName((String) body.get("userName"));
         if(user != null){
-            if(!user.getPassword().equals(EncryptUtil.doEncrypt(form.getPassword()))){
+            if(!user.getPassword().equals(EncryptUtil.doEncrypt((String) body.get("password")))){
                 rbody.setStatus(ResponseState.FAILED);
                 rbody.setMsg("密码错误！");
             }else{
+                String token = UUID.randomUUID().toString();
+                user.setToken(token);
+                user.setIp(IpUtil.getIpAddr(request));
+                user.setLastLoginDate(new Date());
+                user.setPassword("");
+                rbody.setData(user);
+
+                userSer.login(user);
+
+                logUtil.action("用户登录", "用户名:" + user.getUserName());
+
                 rbody.setStatus(ResponseState.SUCCESS);
                 rbody.setMsg("Success");
-                rbody.setRedirectUrl("/");
-                String token = UUID.randomUUID().toString();
-                data.put("token", token);
-                data.put("nickName",user.getNickName());
-                data.put("userName",user.getUserName());
-                rbody.setData(data);
-
-                userSer.updateToken(user.getUserId(), token);
-
-                HttpSession session = request.getSession();
-                session.setAttribute(Context.USER, user);
-
-                logUtil.action("用户登录","用户名:"+user.getUserName());
             }
         }else{
             rbody.setStatus(ResponseState.FAILED);
@@ -73,11 +67,11 @@ public class LoginController extends AbstractController {
 
     @RequestMapping(value = {"/logoff"},method = RequestMethod.POST)
     @ResponseBody
-    public ReturnBody logoff(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        session.removeAttribute(Context.USER);
-
+    @NotNull(value = "", user = true)
+    public ReturnBody logoff(@RequestBody ParamsBody paramsBody,HttpServletRequest request){
         ReturnBody rbody = new ReturnBody();
+
+        userSer.logout(paramsBody.getToken());
         rbody.setStatus(ResponseState.SUCCESS);
         return rbody;
     }
@@ -89,25 +83,21 @@ public class LoginController extends AbstractController {
      */
     @RequestMapping(value = {"/autoLogin"},method = RequestMethod.POST)
     @ResponseBody
-    public ReturnBody autoLogin(HttpServletRequest request) throws UnsupportedEncodingException {
+    @NotNull(value = "", user = true)
+    public ReturnBody autoLogin(@RequestBody ParamsBody paramsBody,HttpServletRequest request) {
         ReturnBody rbody = new ReturnBody();
 
-        Map<String, String> cookieParam = ParameterUtil.cookiesToMap(request.getCookies());
-        User user = (User)request.getSession().getAttribute(Context.USER);
-        String token = cookieParam.get("token");
-        String userName = cookieParam.get("userName");
+        //Map<String, String> cookieParam = ParameterUtil.cookiesToMap(request.getCookies());
+        User user = null;
+        String token = paramsBody.getToken();
 
-        if (token != null) {
-            userName = URLDecoder.decode(userName, "utf-8");
-            user = userSer.selectByName(userName);
-            if (user != null && token.equals(user.getToken())) {
-                request.getSession().setAttribute(Context.USER, user);
-                rbody.setData(user.getNickName());
-                rbody.setStatus(ResponseState.SUCCESS);
-            } else {
-                rbody.setStatus(ResponseState.FAILED);
-            }
-        }else{
+        user = userSer.selectByToken(token);
+        if (user != null) {
+            user.setPassword("");
+            rbody.setData(user);
+            rbody.setStatus(ResponseState.SUCCESS);
+        } else {
+            rbody.setMsg("token失效");
             rbody.setStatus(ResponseState.FAILED);
         }
 

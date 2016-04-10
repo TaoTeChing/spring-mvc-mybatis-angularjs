@@ -16,7 +16,15 @@ public interface UserSer {
 
     public int addUser(User user);
 
-    Boolean update(User user);
+    public Boolean update(User user);
 
-    Boolean del(String userId);
+    public Boolean del(String userId);
+
+    public User login(User user);
+
+    public Boolean logout(String token);
+
+    public User selectByToken(String token);
+
+    public User selectById(String userId);
 }
