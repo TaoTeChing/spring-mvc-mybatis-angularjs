@@ -36,7 +36,12 @@ public class UserSerImpl implements UserSer {
     }
 
     public int addUser(User user){
-        return mapper.insertUser(user);
+        int i = mapper.insertUser(user);
+
+        BoundHashOperations<String, String, String> userToken = redis.boundHashOps("userToken");
+        Date date = DateUtils.addDays(new Date(), 1);
+        userToken.put(user.getToken(),user.getUserId() + "," + date.getTime());
+        return i;
     }
 
     public Boolean update(User user) {

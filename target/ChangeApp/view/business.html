@@ -5,9 +5,9 @@
                 </br>
                 <div>
                     <div style="text-align: center;">
-                        <img bn-lazy-src="{{domain+business.img}}" src="/lazy.png" width="250" height="200">
+                        <img bn-lazy-src="{{domain+business.img}}" src="/resources/images/lazy.png" width="250" height="200">
                         <h3>{{business.gameName}}</h3>
-                        <p>{{business.price}}</p>
+                        <p>{{business.price | currency:'￥'}}</p>
                     </div>
                     <div style="text-align: center;">
                         <button ng-click="addCart(business.businessId)" class="btn btn-lg btn-primary" type="button">

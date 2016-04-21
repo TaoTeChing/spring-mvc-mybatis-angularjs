@@ -47,6 +47,7 @@ public class CartController extends AbstractController {
 
     @RequestMapping(value = {"/cart/list"},method = RequestMethod.POST)
     @ResponseBody
+    @NotNull(value = "",user = true)
     public ReturnBody getCart(@RequestBody ParamsBody paramsBody,HttpServletRequest request){
         ReturnBody rbody = new ReturnBody();
 

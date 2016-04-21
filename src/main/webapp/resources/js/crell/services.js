@@ -11,7 +11,7 @@ app.factory('BaseDataService',['BaseService',function(BaseService){
         }
     }
 }])
-.factory('LoginService',['$q','$http','BaseService',function($q,$http,BaseService){
+.factory('LoginService',['$q','$location','BaseService',function($q,$location,BaseService){
     var loginInfo = {hasLogin:false};
     return {
         login:function(condition){
@@ -50,7 +50,7 @@ app.factory('BaseDataService',['BaseService',function(BaseService){
                 loginInfo.hasLogin = true;
                 loginInfo.loginerror = false;
             }else{
-                location.href = '/login';
+                $location.path('login');
             }
             return loginInfo;
         },
@@ -72,7 +72,7 @@ app.factory('BaseDataService',['BaseService',function(BaseService){
         }
     }
 }])
-.factory("RegisterService",['$q','$http','BaseService',function($q,$http,BaseService){
+.factory("RegisterService",['BaseService',function(BaseService){
     return{
         register : function(condition){
             return BaseService.post('/ajax/user',condition);
@@ -82,13 +82,6 @@ app.factory('BaseDataService',['BaseService',function(BaseService){
         },
         deleteUser : function(condition){
             return BaseService.delete('/ajax/user',condition);
-        },
-        remoteValid : function(userName){
-            var deferred = $q.defer();
-            $http.post('/ajax/user/validUserName',{'userName':userName}).success(function(data){
-                deferred.resolve(data);
-            });
-            return deferred.promise;
         }
     }
 }])

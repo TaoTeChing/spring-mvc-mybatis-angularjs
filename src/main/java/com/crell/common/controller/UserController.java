@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by crell on 2016/1/17.
@@ -79,6 +80,8 @@ public class UserController extends AbstractController {
             rbody.setMsg("用户别名已存在");
             rbody.setStatus(ResponseState.FAILED);
         }else {
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setPassword(EncryptUtil.doEncrypt(user.getPassword()));
             user.setCreateDate(new Date());
             userSer.addUser(user);

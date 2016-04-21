@@ -3,6 +3,7 @@
  * Controller
  */
 app.controller('RouteMainCtl',['$scope','$location','BusinessService',function($scope,$location,BusinessService){
+
         $scope.condition = {
             gameTypeCode : 'ACT'
         },
@@ -96,55 +97,34 @@ app.controller('RouteMainCtl',['$scope','$location','BusinessService',function($
         };
 }])
 .controller('RouteCartCtl',['$scope','CartService',function($scope,CartService) {
-        CartService.myCart()
-        .success(function(obj) {
+        CartService.myCart().success(function(obj) {
             $scope.cartList = obj.data;
         });
+        $scope.balance = 0;
 
-        $scope.selected = [];
-        $scope.cartBalance = 0;
-        $scope.cartSelect = function(target){
-            if(target.classList.length == 1){
-                var isSel = true;
-                if($scope.cartList.length == $scope.selected.length) isSel = false;
-                angular.forEach($scope.cartList,function(data){
-                    $scope["isSel"+data.business.businessId] = isSel;
-                    if(isSel && $scope.selected.indexOf(data.business.businessId) == -1) $scope.selected.push(data.business.businessId);
-                    if(!isSel) $scope.selected = [];
-                });
-                sumBalance(true,isSel);
-            }else{
-                var id = parseInt(target.children[0].innerText);
-                if($scope.selected.indexOf(id) == -1){
-                    $scope.selected.push(id);
-                    $scope["isSel"+id] = true;
-                    sumBalance(id,true);
-                }else{
-                    var index = $scope.selected.indexOf(id);
-                    $scope.selected.splice(index,1);
-                    $scope["isSel"+id] = false;
-                    sumBalance(id);
-                }
-            }
-        };
-
-        var sumBalance = function(id,plus){
+        $scope.sumBalance = function(target){
             var price = 0;
-            if(typeof id == 'boolean' && plus) $scope.cartBalance = 0;
-            angular.forEach($scope.cartList,function(data){
-                if(typeof id == 'boolean'){
+            if(target.textContent == ''){
+                var iSelect = false;
+                angular.forEach($scope.cartList,function(data){
                     price = price + data.business.price * data.num;
-                }else{
-                    if(data.business.businessId == id){
-                        price = data.business.price * data.num;
-                    }
-                }
-            });
-            $scope.cartBalance = plus?$scope.cartBalance + price : $scope.cartBalance - price;
+                    if(data.ishow == false) iSelect = true;
+                });
+                price = iSelect?-price:price;
+            }else{
+                var id = parseInt(target.textContent);
+                price = $scope.cartList[id].business.price * $scope.cartList[id].num;
+                if($scope.cartList[id].ishow == false) price = -price;
+            }
+            $scope.balance = $scope.balance + price;
         };
 
         $scope.goBalance = function(){
-            if($scope.selected.length == 0){
+            var iSelect = false;
+            angular.forEach($scope.cartList,function(data){
+                if(data.ishow == true) iSelect = true;
+            });
+            if(!iSelect){
                 alert("请选择商品");
                 return;
             }
@@ -159,8 +139,9 @@ app.controller('RouteMainCtl',['$scope','$location','BusinessService',function($
                 if(obj.data.status == Status.SUCCESS){
                     var loginInfo = obj.data.data;
 
-                    $.cookie('userName',loginInfo.userName,{expires: 1});
+                    $.cookie('userId',loginInfo.userId,{expires: 1});
                     $.cookie('nickName',loginInfo.nickName,{expires: 1});
+                    $.cookie('token',loginInfo.token,{expires: 1});
                     location.href = '/my';
                 }
             });
@@ -172,17 +153,6 @@ app.controller('RouteMainCtl',['$scope','$location','BusinessService',function($
             });
         }
     }
-
-    $scope.validExists = function(){
-        if($scope.form.userName){
-            RegisterService.remoteValid($scope.form.userName).then(function(data) {
-                if(data.status == Status.SUCCESS){
-                    return true;
-                }
-            });
-        }
-        return false;
-    };
 
     $scope.checkMatch = function(){
         var form = $scope.form;

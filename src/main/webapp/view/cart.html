@@ -1,44 +1,41 @@
-<div class="new">
-<div class="main">
-    <div class="module-box corner saleorderCon">
-        <div class="order-top">
-            <span class="fl">
-	            <label ng-click="cartSelect($event.target)" class="cartCheckbox"><i class="iconfont icon-selected"></i></label>
-	            <input class="checkedNone" type="checkbox">
-	            <span class="mr8 cartTit">全选</span>
-            </span>
-            <span class="fr editIcon"><a href="###">###</a></span>
-        </div>
-        <ul class="order-goods-list saleorder">
-            <li ng-repeat='cart in cartList'>
-                <span ng-click="cartSelect($event.currentTarget)" class="cartCheckbox boxDisable" ng-class="{'cartCheckboxOn': isSel{{cart.business.businessId}}}">
-                    <i class="iconfont icon-selected">{{cart.business.businessId}}</i>
-                </span>
-                <input class="checkedNone" type="checkbox">
-                <div class="rightInfo">
-                    <div class="pic">
-                        <a href="###"><img bn-lazy-src="{{domain+cart.business.img}}" src="/lazy.png" alt=""></a>
-                    </div>
-                    <div class="info">
-                        <span class="name"><a href="#" target="_blank" title="{{cart.business.gameName}}">{{cart.business.gameName}}</a></span>
-                        <div class="price">
-                            <p>￥{{cart.business.price}}
-                                <span>X{{cart.num}}</span>
-                            </p>
+<div class="cart-main">
+<header class="cart-header">
+    <div class="cart-title-left">
+        <checkbox ng-click="sumBalance($event.currentTarget)" cart-list="cartList"></checkbox>
+        <label>全选</label>
+    </div>
+    <a href="" class="cart-title-right">编辑全部</a>
+    <div class="head-title">购物车</div>
+</header>
+<div class="content">
+    <ul class="cart-ul">
+        <li>
+            <div class="cart-show-list">
+                <div class="cart-item" ng-repeat="cart in cartList | cartListFilter">
+                    <checkbox ng-click="sumBalance($event.currentTarget)" cart-id="cart.business.businessId" cart-list="cartList" i="$index"></checkbox>
+                    <div class="cart-cell">
+                        <div class="cart-item-img"><img bn-lazy-src="{{domain+cart.business.img}}" src="/resources/images/lazy.png"></div>
+                        <div class="cart-item-content">
+                            <a href="#">{{cart.business.gameName | cartNameFilter}}</a>
+                            <div class="cart-item-money">
+                                <div class="money">{{cart.business.price | currency:'￥'}}</div>
+                                <div class="number">X <span>{{cart.num}}</span></div>
+                            </div>
                         </div>
-                        <div class="clearfix"></div>
                     </div>
                 </div>
-            </li>
-        </ul>
-    </div>
-    <div class="bottmHeight"></div>
-    <div class="footer-btn clearfix">
-        <div class="fr">
-            <a href="#" class="btn-wm" ng-click="goBalance()">去结算({{cartList.length}})</a>
-        </div>
-        <div class="fl">
-            <p><span class="color-org">合计：￥{{cartBalance}}</span></p>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="footer">
+    <div class="cart-op">
+        <a href="#" class="file-button" ng-click="goBalance()">去结算({{cartList.length}})</a>
+        <div class="file-left">
+            <div class="cart-show-left">
+                <div class="fl">合计：</div>
+                <div class="cart-show-money">{{balance}}</div>
+            </div>
         </div>
     </div>
 </div>

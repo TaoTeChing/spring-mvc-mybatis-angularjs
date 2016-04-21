@@ -11,13 +11,19 @@
 
     <title>商城</title>
 
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS-->
     <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+
+    <!-- normalize.css -->
+    <link rel="stylesheet" href="/resources/css/normalize.css">
     <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/resources/css/crell/base.css">
     <link rel="stylesheet" href="/resources/css/crell/index.css">
-    <!-- cart css -->
+    <link rel="stylesheet" href="/resources/css/crell/login.css">
+    <link rel="stylesheet" href="/resources/css/crell/register.css">
     <link rel="stylesheet" href="/resources/css/crell/cart.css">
-    <link rel="stylesheet" href="/resources/css/crell/iconfont.css">
+    <link rel="stylesheet" href="/resources/css/crell/my.css">
+    <link rel="stylesheet" href="/resources/css/crell/iconfont/iconfont.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -28,25 +34,20 @@
 
 <body ng-app="mainApp">
 
-<div  ng-controller="MainController">
-    <div class="header clearfix">
-        <nav>
-            <ul class="nav nav-pills pull-right">
-                <li role="presentation" class="active"><a href="/#/">首页</a></li>
-                <li role="presentation"><a href="/#/about">关于</a></li>
-                <li role="presentation"><a href="/#/my">我的</a></li>
-            </ul>
-        </nav>
-        <h3 class="text-muted">商城</h3>
-    </div>
+<div class="main" ng-controller="MainController">
+    <header class="header">
+        <a class="logo"><img bn-lazy-src="{{domain}}logo.png" src="/resources/images/lazy.png"/></a>
+        <div class="search iconfont icon-chaxun">
+            搜索商品
+        </div>
+        <a href="/#/my" class="iconfont icon-geren"></a>
+        <a href="/#/cart" class="iconfont icon-gouwuche"></a>
+        <a href="/#/" class="iconfont icon-shouye"></a>
+    </header>
 
     <div class="container">
         <div ng-view></div>
     </div>
-
-    <footer class="footer">
-        <p>&copy; Crell 2016</p>
-    </footer>
 
 </div> <!-- /container -->
 
@@ -60,6 +61,8 @@
 <script type="text/javascript" src="/resources/js/crell/baseServices.js"></script>
 <script type="text/javascript" src="/resources/js/crell/services.js"></script>
 <script type="text/javascript" src="/resources/js/crell/controllers.js"></script>
+<script type="text/javascript" src="/resources/js/crell/filters.js"></script>
+<script type="text/javascript" src="/resources/js/crell/directives.js"></script>
 <script type="text/javascript" src="/resources/js/fastclick.js"></script>
 </body>
 </html>
