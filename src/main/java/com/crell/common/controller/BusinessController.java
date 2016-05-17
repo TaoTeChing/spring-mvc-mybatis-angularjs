@@ -31,6 +31,8 @@ public class BusinessController extends AbstractController {
     @RequestMapping(value = {"/business/list"},method = RequestMethod.POST)
     @ResponseBody
     public ReturnBody getBusinessList(@RequestBody ParamsBody paramsBody,HttpServletRequest request){
+        String headerToken = request.getHeader("token");
+
         ReturnBody rbody = new ReturnBody();
         Page page = businessSer.getBusinessList(paramsBody.getBody(), paramsBody.getPage());
         List<Business> businessList = page.getResults();
@@ -56,6 +58,7 @@ public class BusinessController extends AbstractController {
 
     @RequestMapping(value = {"/business"},method = RequestMethod.POST)
     @NotNull(value = "gameName",user = true)
+    @ResponseBody
     public ReturnBody add(@RequestBody ParamsBody paramsBody,HttpServletRequest request) throws Exception {
         ReturnBody rbody = new ReturnBody();
         Map<String, Object> body = paramsBody.getBody();

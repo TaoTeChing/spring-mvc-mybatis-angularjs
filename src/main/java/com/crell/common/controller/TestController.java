@@ -2,19 +2,17 @@ package com.crell.common.controller;
 
 
 import com.crell.common.service.TestSer;
-import com.crell.core.annotation.BodyFormat;
-import com.crell.core.annotation.NotNull;
 import com.crell.core.constant.ResponseState;
 import com.crell.core.controller.AbstractController;
+import com.crell.core.dto.Page;
 import com.crell.core.dto.ParamsBody;
 import com.crell.core.dto.ReturnBody;
+import com.crell.core.util.ParamsBodyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.DataInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,20 +29,18 @@ public class TestController extends AbstractController {
         return new ModelAndView("test");
     }
 
-    @RequestMapping(value = {"/bodyTest"},method = RequestMethod.POST)
-    @BodyFormat(value = "code")
-    @NotNull(value = "code")
+    @RequestMapping(value = {"/bodyTest"},method = RequestMethod.GET)
     @ResponseBody
-    public ReturnBody bodyTest(@RequestBody ParamsBody paramsBody,HttpServletRequest request) throws Exception {
+    public ReturnBody bodyTest(HttpServletRequest request) throws Exception {
         ReturnBody returnbody = new ReturnBody();
-
-//        InputStream is = request.getInputStream();
-//        DataInputStream input = new DataInputStream(is);
-//        String json =input.readUTF();
+        ParamsBody paramsBody = ParamsBodyUtil.getBody(request);
 
         Map<String,Object> body = paramsBody.getBody();
+        Page page = paramsBody.getPage();
+        
         List<Object> list = new ArrayList<Object>();
         list.add(body.get("name"));
+        list.add(page.getPageSize());
         list.add("测试1");
         list.add("测试2");
         list.add("测试3");
@@ -85,6 +81,19 @@ public class TestController extends AbstractController {
         list.add(returnBody1);
         map.put("list", list);
         return new ModelAndView("test.vm",map);
+    }
+
+    @RequestMapping(value = {"/pushTest"},method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnBody pushTest(HttpServletRequest request) throws Exception {
+        ReturnBody returnbody = new ReturnBody();
+
+        testSer.testThread();
+
+        returnbody.setStatus(ResponseState.SUCCESS);
+        returnbody.setData("成功");
+
+        return returnbody;
     }
 
 }

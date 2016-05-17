@@ -11,7 +11,7 @@ public class ParamsBody{
 
 	private String token;//token令牌
 	
-	private Integer random;//随机数
+	private String random;//随机数
 
 	private Long timestamp;//时间戳
 
@@ -27,11 +27,11 @@ public class ParamsBody{
 		this.token = token;
 	}
 
-	public Integer getRandom() {
+	public String getRandom() {
 		return random;
 	}
 
-	public void setRandom(Integer random) {
+	public void setRandom(String random) {
 		this.random = random;
 	}
 

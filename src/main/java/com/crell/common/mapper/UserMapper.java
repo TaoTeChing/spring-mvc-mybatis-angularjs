@@ -1,6 +1,7 @@
 package com.crell.common.mapper;
 
 import com.crell.common.model.User;
+import com.crell.core.annotation.DataSource;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,7 @@ public interface UserMapper {
      * @param userName
      * @return User
      */
+    @DataSource("slave")
     User selectByName(String userName);
 
     /**
@@ -23,6 +25,7 @@ public interface UserMapper {
      * @param nickName
      * @return User
      */
+    @DataSource("slave")
     User selectByNickName(String nickName);
 
     /**
@@ -31,6 +34,7 @@ public interface UserMapper {
      * @param token
      * @return
      */
+    @DataSource("master")
     int updateToken(@Param("userId") String userId, @Param("token") String token);
 
     /**
@@ -38,10 +42,13 @@ public interface UserMapper {
      * @param user
      * @return int
      */
+    @DataSource("master")
     int insertUser(User user);
 
+    @DataSource("master")
     Boolean update(User user);
 
+    @DataSource("master")
     Boolean del(@Param("userId") String userId);
 
     /**
@@ -49,6 +56,7 @@ public interface UserMapper {
      * @param userId
      * @return User
      */
+    @DataSource("slave")
     User selectById(String userId);
 
     /**
@@ -56,5 +64,6 @@ public interface UserMapper {
      * @param user
      * @return Boolean
      */
+    @DataSource("master")
     Boolean setLoginInfo(User user);
 }

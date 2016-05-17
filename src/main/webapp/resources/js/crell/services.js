@@ -11,7 +11,7 @@ app.factory('BaseDataService',['BaseService',function(BaseService){
         }
     }
 }])
-.factory('LoginService',['$q','$location','BaseService',function($q,$location,BaseService){
+.factory('LoginService',['$q','$location','$http','BaseService',function($q,$location,$http,BaseService){
     var loginInfo = {hasLogin:false};
     return {
         login:function(condition){
@@ -24,6 +24,7 @@ app.factory('BaseDataService',['BaseService',function(BaseService){
                     $.cookie('userId',loginInfo.userId,{expires: 1});
                     $.cookie('nickName',loginInfo.nickName,{expires: 1});
                     $.cookie('token',loginInfo.token,{expires: 1});
+                    $http.defaults.headers.common.token = loginInfo.token;
                 }else{
                     loginInfo.hasLogin = false;
                     loginInfo.loginerror = true;

@@ -14,4 +14,6 @@ public interface TestSer {
     public String testException() throws Exception;
 
     public List<String> testPage(Map<String, Object> body, Page page);
+
+    public void testThread();
 }
