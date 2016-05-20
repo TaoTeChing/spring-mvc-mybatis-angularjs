@@ -144,26 +144,24 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <!--
-    配置AOP切面
+    <!-- 配置AOP切面 -->
     <aop:config>
-    <aop:pointcut id="transactionPointcut" expression="execution(* com.crell..common.service.*.*(..))"/>
+    <aop:pointcut id="transactionPointcut" expression="execution(* com.crell.common.service.*.*(..))"/>
     <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
     </aop:config>
 
-    AOP配置事物
+    <!-- AOP配置事物 -->
     <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="query*" read-only="true"/>
-            <tx:method name="delete*"  propagation="REQUIRED" />
-            <tx:method name="update*" propagation="REQUIRED" />
-            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="delete*"  propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
         </tx:attributes>
     </tx:advice>
-    -->
 
-    <!-- 使用annotation注解方式配置事务 @Transactional -->
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!-- 使用annotation注解方式配置事务 @Transactional
+    <tx:annotation-driven transaction-manager="transactionManager" /> -->
 
     <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <!-- 核心线程数 -->

@@ -8,8 +8,26 @@ import java.io.Serializable;
  */
 public class Dictionary implements Serializable {
 
+    private int dictId;
+    private String category;
     private String code;
     private String name;
+
+    public int getDictId() {
+        return dictId;
+    }
+
+    public void setDictId(int dictId) {
+        this.dictId = dictId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getCode() {
         return code;

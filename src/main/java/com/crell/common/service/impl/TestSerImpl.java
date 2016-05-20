@@ -1,5 +1,7 @@
 package com.crell.common.service.impl;
 
+import com.crell.common.mapper.DictionaryMapper;
+import com.crell.common.model.Dictionary;
 import com.crell.common.model.User;
 import com.crell.common.service.TestSer;
 import com.crell.common.service.UserSer;
@@ -8,6 +10,7 @@ import com.crell.core.dto.Page;
 import com.crell.core.servlet.ThreadPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,9 @@ public class TestSerImpl implements TestSer {
     @Autowired
     TaskExecutor taskExecutor;
 
+    @Autowired
+    DictionaryMapper mapper;
+
     public String selectUser() {
         return "cq";
     }
@@ -41,7 +47,7 @@ public class TestSerImpl implements TestSer {
         return null;
     }
 
-    //@Cacheable(value="default")  测试，spring redis cache。"default" 为配置的cacheManager的名称，可配多个
+    @Cacheable(value="cache30m")  //测试，spring redis cache。"default" 为配置的cacheManager的名称，可配多个
     public List<String> testPage(Map<String, Object> body, Page page) {
         List<String> list = new ArrayList<String>();
         int pageNo = page.getPageNo();
@@ -79,6 +85,27 @@ public class TestSerImpl implements TestSer {
 //        }catch(Exception e){
 //            e.printStackTrace();
 //        }
+
+    }
+
+    public void addTransactionTest() throws Exception{
+        Dictionary dictionary = new Dictionary();
+        dictionary.setCategory("bl");
+        dictionary.setName("cq1");
+        dictionary.setCode("1");
+        mapper.add(dictionary);
+
+        //int i = 1 / 0;  //runtimeException
+
+        try {
+            throw new Exception();   //spring事务 默认回滚runtimeException,非运行时异常需配置rollback-for
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
+
+    @CacheEvict(value="cache30m",allEntries=true)
+    public void clearAllCache() {
 
     }
 }

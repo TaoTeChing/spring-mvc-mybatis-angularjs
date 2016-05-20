@@ -59,19 +59,24 @@ public class RedisCache implements Cache {
 	public ValueWrapper get(Object key) {
 		final String keyf = key.toString();
 		Object object = null;
-		object = redisTemplate.execute(new RedisCallback<Object>() {
-			public Object doInRedis(RedisConnection connection)
-					throws DataAccessException {
+		try{
+			object = redisTemplate.execute(new RedisCallback<Object>() {
+				public Object doInRedis(RedisConnection connection)
+						throws DataAccessException {
 
-				byte[] key = keyf.getBytes();
-				byte[] value = connection.get(key);
-				if (value == null) {
-					return null;
+					byte[] key = keyf.getBytes();
+					byte[] value = connection.get(key);
+					if (value == null) {
+						return null;
+					}
+					return toObject(value);
+
 				}
-				return toObject(value);
+			});
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
-			}
-		});
 		return (object != null ? new SimpleValueWrapper(object) : null);
 	}
 
@@ -84,18 +89,23 @@ public class RedisCache implements Cache {
 		final Object valuef = value;
 		final long liveTime = Long.parseLong(cacheTime);
 
-		redisTemplate.execute(new RedisCallback<Long>() {
-			public Long doInRedis(RedisConnection connection)
-					throws DataAccessException {
-				byte[] keyb = keyf.getBytes();
-				byte[] valueb = toByteArray(valuef);
-				connection.set(keyb, valueb);
-				if (liveTime > 0) {
-					connection.expire(keyb, liveTime);
+		try{
+			redisTemplate.execute(new RedisCallback<Long>() {
+				public Long doInRedis(RedisConnection connection)
+						throws DataAccessException {
+					byte[] keyb = keyf.getBytes();
+					byte[] valueb = toByteArray(valuef);
+					connection.set(keyb, valueb);
+					if (liveTime > 0) {
+						connection.expire(keyb, liveTime);
+					}
+					return 1L;
 				}
-				return 1L;
-			}
-		});
+			});
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
 	}
 
 	public ValueWrapper putIfAbsent(Object o, Object o1) {

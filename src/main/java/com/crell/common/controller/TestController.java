@@ -96,4 +96,30 @@ public class TestController extends AbstractController {
         return returnbody;
     }
 
+    @RequestMapping(value = {"/transactionTest"},method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnBody transactionTest(HttpServletRequest request) throws Exception {
+        ReturnBody returnbody = new ReturnBody();
+
+        testSer.addTransactionTest();
+
+        returnbody.setStatus(ResponseState.SUCCESS);
+        returnbody.setData("成功");
+
+        return returnbody;
+    }
+
+    @RequestMapping(value = {"/clearAllCache"},method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnBody clearAllCache(HttpServletRequest request){
+        ReturnBody returnbody = new ReturnBody();
+
+        testSer.clearAllCache();
+
+        returnbody.setStatus(ResponseState.SUCCESS);
+        returnbody.setData("成功");
+
+        return returnbody;
+    }
+
 }

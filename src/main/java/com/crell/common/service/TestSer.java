@@ -16,4 +16,8 @@ public interface TestSer {
     public List<String> testPage(Map<String, Object> body, Page page);
 
     public void testThread();
+
+    public void addTransactionTest() throws Exception;
+
+    public void clearAllCache();
 }

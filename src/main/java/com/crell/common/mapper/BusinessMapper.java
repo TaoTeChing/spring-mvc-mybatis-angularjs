@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by FunkySoya on 2015/6/18.
+ * Created by crell on 2015/6/18.
  */
 @Repository
 public interface BusinessMapper {
