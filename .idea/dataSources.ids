@@ -1,168 +1,417 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source name="MySQL - db_tdct@localhost" uuid="8f027469-35bb-40d7-9305-58548b472df1">
-    <database-info product="MySQL" version="5.7.12" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+  <data-source name="MySQL - db_tdct@localhost" uuid="84b8df08-6b4d-4d0e-a057-48ca4c1af523">
+    <database-info product="MySQL" version="5.6.28-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
       <extra-name-characters>#@</extra-name-characters>
       <identifier-quote-string>`</identifier-quote-string>
     </database-info>
-    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper"/>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
     <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5">
       <schema id="1" name="db_tdct"/>
-      <table id="2" parent="1" name="tuser"/>
-      <table id="3" parent="1" name="dictionary"/>
-      <table id="4" parent="1" name="tbusiness"/>
-      <column id="5" parent="2" name="userId">
+      <table id="2" parent="1" name="dictionary"/>
+      <table id="3" parent="1" name="tbusiness"/>
+      <table id="4" parent="1" name="tuser"/>
+      <table id="5" parent="1" name="activity">
+        <comment>活动表</comment>
+      </table>
+      <table id="6" parent="1" name="relation">
+        <comment>购买联系表</comment>
+      </table>
+      <table id="7" parent="1" name="information">
+        <comment>资讯表</comment>
+      </table>
+      <table id="8" parent="1" name="menu">
+        <comment>菜单属性表</comment>
+      </table>
+      <table id="9" parent="1" name="role">
+        <comment>角色属性表</comment>
+      </table>
+      <table id="10" parent="1" name="rolegroup">
+        <comment>角色菜单关系表</comment>
+      </table>
+      <table id="11" parent="1" name="user">
+        <comment>用户属性表</comment>
+      </table>
+      <table id="12" parent="1" name="usergroup">
+        <comment>用户角色关系表</comment>
+      </table>
+      <column id="13" parent="2" name="dictId">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="6" parent="2" name="userName">
+      <column id="14" parent="2" name="category">
         <mandatory>1</mandatory>
         <data-type>varchar(45)</data-type>
       </column>
-      <column id="7" parent="2" name="nickName">
+      <column id="15" parent="2" name="name">
         <mandatory>1</mandatory>
         <data-type>varchar(45)</data-type>
       </column>
-      <column id="8" parent="2" name="password">
+      <column id="16" parent="2" name="code">
         <mandatory>1</mandatory>
         <data-type>varchar(45)</data-type>
       </column>
-      <column id="9" parent="2" name="createDate">
-        <mandatory>1</mandatory>
-        <data-type>datetime</data-type>
-      </column>
-      <column id="10" parent="2" name="lastLoginDate">
-        <data-type>datetime</data-type>
-      </column>
-      <column id="11" parent="2" name="ip">
-        <data-type>varchar(45)</data-type>
-      </column>
-      <column id="12" parent="2" name="photo">
-        <data-type>varchar(45)</data-type>
-      </column>
-      <column id="13" parent="2" name="qq">
-        <data-type>varchar(45)</data-type>
-      </column>
-      <column id="14" parent="2" name="locked">
-        <data-type>tinyint(4)</data-type>
-        <default-expression>&apos;0&apos;</default-expression>
-      </column>
-      <column id="15" parent="2" name="token">
-        <data-type>varchar(45)</data-type>
-      </column>
-      <key id="16" parent="2" name="PRIMARY">
-        <columns>userId</columns>
-        <primary>1</primary>
-      </key>
-      <column id="17" parent="3" name="dictId">
-        <mandatory>1</mandatory>
-        <data-type>int(11)</data-type>
-        <sequence-identity>1</sequence-identity>
-      </column>
-      <column id="18" parent="3" name="category">
-        <mandatory>1</mandatory>
-        <data-type>varchar(45)</data-type>
-      </column>
-      <column id="19" parent="3" name="name">
-        <mandatory>1</mandatory>
-        <data-type>varchar(45)</data-type>
-      </column>
-      <column id="20" parent="3" name="code">
-        <mandatory>1</mandatory>
-        <data-type>varchar(45)</data-type>
-      </column>
-      <column id="21" parent="3" name="enable">
+      <column id="17" parent="2" name="enable">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <default-expression>&apos;1&apos;</default-expression>
       </column>
-      <column id="22" parent="3" name="desc">
+      <column id="18" parent="2" name="desc">
         <data-type>varchar(100)</data-type>
       </column>
-      <key id="23" parent="3" name="PRIMARY">
+      <key id="19" parent="2" name="PRIMARY">
         <columns>dictId</columns>
         <primary>1</primary>
       </key>
-      <column id="24" parent="4" name="businessId">
+      <column id="20" parent="3" name="businessId">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="25" parent="4" name="gameName">
+      <column id="21" parent="3" name="gameName">
         <mandatory>1</mandatory>
         <data-type>varchar(100)</data-type>
       </column>
-      <column id="26" parent="4" name="enName">
+      <column id="22" parent="3" name="enName">
         <data-type>varchar(45)</data-type>
       </column>
-      <column id="27" parent="4" name="gameTypeCode">
+      <column id="23" parent="3" name="gameTypeCode">
         <mandatory>1</mandatory>
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="28" parent="4" name="platformCode">
+      <column id="24" parent="3" name="platformCode">
         <mandatory>1</mandatory>
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="29" parent="4" name="editionCode">
+      <column id="25" parent="3" name="editionCode">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="30" parent="4" name="price">
+      <column id="26" parent="3" name="price">
         <data-type>decimal(9,2)</data-type>
       </column>
-      <column id="31" parent="4" name="qualityCode">
+      <column id="27" parent="3" name="qualityCode">
         <mandatory>1</mandatory>
         <data-type>tinyint(4)</data-type>
       </column>
-      <column id="32" parent="4" name="qq">
+      <column id="28" parent="3" name="qq">
         <data-type>varchar(15)</data-type>
       </column>
-      <column id="33" parent="4" name="mobilephone">
+      <column id="29" parent="3" name="mobilephone">
         <data-type>varchar(20)</data-type>
       </column>
-      <column id="34" parent="4" name="maker">
+      <column id="30" parent="3" name="maker">
         <data-type>varchar(45)</data-type>
       </column>
-      <column id="35" parent="4" name="publisher">
+      <column id="31" parent="3" name="publisher">
         <data-type>varchar(45)</data-type>
       </column>
-      <column id="36" parent="4" name="businessTypeCode">
+      <column id="32" parent="3" name="businessTypeCode">
         <mandatory>1</mandatory>
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="37" parent="4" name="tradingWayCode">
+      <column id="33" parent="3" name="tradingWayCode">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="38" parent="4" name="location">
+      <column id="34" parent="3" name="location">
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="39" parent="4" name="description">
+      <column id="35" parent="3" name="img">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="36" parent="3" name="description">
         <data-type>tinytext</data-type>
       </column>
-      <column id="40" parent="4" name="createDate">
+      <column id="37" parent="3" name="createDate">
         <mandatory>1</mandatory>
         <data-type>timestamp</data-type>
         <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
       </column>
-      <column id="41" parent="4" name="modifyDate">
+      <column id="38" parent="3" name="modifyDate">
         <mandatory>1</mandatory>
         <data-type>timestamp</data-type>
-        <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
+        <default-expression>&apos;0000-00-00 00:00:00&apos;</default-expression>
       </column>
-      <column id="42" parent="4" name="creator">
+      <column id="39" parent="3" name="creator">
         <mandatory>1</mandatory>
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="43" parent="4" name="level">
+      <column id="40" parent="3" name="level">
         <mandatory>1</mandatory>
         <data-type>tinyint(4)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="44" parent="4" name="img">
+      <key id="41" parent="3" name="PRIMARY">
+        <columns>businessId</columns>
+        <primary>1</primary>
+      </key>
+      <column id="42" parent="4" name="userId">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="43" parent="4" name="userName">
+        <mandatory>1</mandatory>
+        <data-type>varchar(45)</data-type>
+      </column>
+      <column id="44" parent="4" name="nickName">
+        <mandatory>1</mandatory>
+        <data-type>varchar(45)</data-type>
+      </column>
+      <column id="45" parent="4" name="password">
+        <mandatory>1</mandatory>
+        <data-type>varchar(45)</data-type>
+      </column>
+      <column id="46" parent="4" name="createDate">
+        <mandatory>1</mandatory>
+        <data-type>datetime</data-type>
+      </column>
+      <column id="47" parent="4" name="lastLoginDate">
+        <data-type>datetime</data-type>
+      </column>
+      <column id="48" parent="4" name="ip">
+        <data-type>varchar(45)</data-type>
+      </column>
+      <column id="49" parent="4" name="photo">
+        <data-type>varchar(45)</data-type>
+      </column>
+      <column id="50" parent="4" name="qq">
+        <data-type>varchar(45)</data-type>
+      </column>
+      <column id="51" parent="4" name="locked">
+        <data-type>tinyint(4)</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="52" parent="4" name="token">
+        <data-type>varchar(45)</data-type>
+      </column>
+      <key id="53" parent="4" name="PRIMARY">
+        <columns>userId</columns>
+        <primary>1</primary>
+      </key>
+      <column id="54" parent="5" name="id">
+        <comment>编号</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="55" parent="5" name="title">
+        <comment>活动标题</comment>
         <data-type>varchar(100)</data-type>
       </column>
-      <key id="45" parent="4" name="PRIMARY">
-        <columns>businessId</columns>
+      <column id="56" parent="5" name="explain">
+        <comment>活动说明</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="57" parent="5" name="position">
+        <comment>活动位置</comment>
+        <data-type>char(1)</data-type>
+      </column>
+      <column id="58" parent="5" name="type">
+        <comment>活动类型</comment>
+        <mandatory>1</mandatory>
+        <data-type>char(1)</data-type>
+      </column>
+      <column id="59" parent="5" name="point">
+        <comment>活动指向</comment>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="60" parent="5" name="pic_url">
+        <comment>图片</comment>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="61" parent="5" name="remarks">
+        <comment>备注信息</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="62" parent="5" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="63" parent="6" name="id">
+        <comment>编号</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="64" parent="6" name="name">
+        <comment>客户姓名</comment>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="65" parent="6" name="phone">
+        <comment>联系电话</comment>
+        <data-type>varchar(11)</data-type>
+      </column>
+      <column id="66" parent="6" name="company">
+        <comment>公司名称</comment>
+        <data-type>char(1)</data-type>
+      </column>
+      <column id="67" parent="6" name="submit_date">
+        <comment>提交时间</comment>
+        <data-type>datetime</data-type>
+      </column>
+      <column id="68" parent="6" name="state">
+        <comment>处理状态</comment>
+        <data-type>char(1)</data-type>
+      </column>
+      <column id="69" parent="6" name="deal_mark">
+        <comment>处理备注</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="70" parent="6" name="deal_date">
+        <comment>处理时间</comment>
+        <data-type>datetime</data-type>
+      </column>
+      <column id="71" parent="6" name="remarks">
+        <comment>备注信息</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="72" parent="6" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="73" parent="7" name="id">
+        <comment>编号</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="74" parent="7" name="title">
+        <comment>标题</comment>
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="75" parent="7" name="subtitle">
+        <comment>副标题</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="76" parent="7" name="source">
+        <comment>来源</comment>
+        <data-type>char(1)</data-type>
+      </column>
+      <column id="77" parent="7" name="type">
+        <comment>资讯类型</comment>
+        <data-type>char(1)</data-type>
+      </column>
+      <column id="78" parent="7" name="pic_url">
+        <comment>图片</comment>
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="79" parent="7" name="content">
+        <comment>资讯内容</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="80" parent="7" name="create_date">
+        <comment>创建时间</comment>
+        <data-type>datetime</data-type>
+      </column>
+      <column id="81" parent="7" name="remarks">
+        <comment>备注信息</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="82" parent="7" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="83" parent="8" name="menuId">
+        <comment>菜单编号</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="84" parent="8" name="menuName">
+        <comment>菜单名称</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="85" parent="8" name="parentId">
+        <comment>父级菜单编号</comment>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="86" parent="8" name="path">
+        <comment>页面路径</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="87" parent="8" name="level">
+        <comment>菜单顺序</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="88" parent="8" name="menuIcon">
+        <comment>菜单图标</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="89" parent="8" name="PRIMARY">
+        <columns>menuId</columns>
+        <primary>1</primary>
+      </key>
+      <column id="90" parent="9" name="roleId">
+        <comment>角色编号</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="91" parent="9" name="roleName">
+        <comment>角色名称</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="92" parent="9" name="PRIMARY">
+        <columns>roleId</columns>
+        <primary>1</primary>
+      </key>
+      <column id="93" parent="10" name="id">
+        <comment>主键</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="94" parent="10" name="roleId">
+        <comment>角色编号</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="95" parent="10" name="menuId">
+        <comment>菜单编号</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="96" parent="10" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="97" parent="11" name="userId">
+        <comment>用户编号</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="98" parent="11" name="userName">
+        <comment>用户名称</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="99" parent="11" name="password">
+        <comment>密码</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="100" parent="11" name="email">
+        <comment>邮箱</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="101" parent="11" name="PRIMARY">
+        <columns>userId</columns>
+        <primary>1</primary>
+      </key>
+      <column id="102" parent="12" name="id">
+        <comment>主键</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="103" parent="12" name="roleId">
+        <comment>角色编号</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="104" parent="12" name="userId">
+        <comment>用户编号</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="105" parent="12" name="PRIMARY">
+        <columns>id</columns>
         <primary>1</primary>
       </key>
     </database-model>

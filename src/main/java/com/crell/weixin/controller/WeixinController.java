@@ -3,10 +3,9 @@ package com.crell.weixin.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.crell.weixin.constant.Context;
-import com.crell.weixin.model.Button;
-import com.crell.weixin.model.Menu;
-import com.crell.weixin.model.SuperButton;
-import com.crell.weixin.model.ViewButton;
+import com.crell.weixin.model.*;
+import com.crell.weixin.service.WechatService;
+import com.crell.weixin.util.MessageUtil;
 import com.crell.weixin.util.SignUtil;
 import com.crell.weixin.util.WeixinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,19 +54,19 @@ public class WeixinController{
 	/**
 	 * 处理微信服务器发来的消息
 	 */
-	@RequestMapping(value = {"/wechat"},method = RequestMethod.POST)
+	@RequestMapping(value = {"/wechat"},method = RequestMethod.POST, produces = "application/xml")
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 将请求、响应的编码均设置为UTF-8（防止中文乱码）
-//		request.setCharacterEncoding("UTF-8");
-//		response.setCharacterEncoding("UTF-8");
-//		WechatService wechatService = new WechatService();
-//		// 调用核心业务类接收消息、处理消息
-//		String respMessage = wechatService.coreService(request);
-//		// 响应消息
-//		PrintWriter out = response.getWriter();
-//		out.print(respMessage);
-//		out.close();
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		WechatService wechatService = new WechatService();
+		// 调用核心业务类接收消息、处理消息
+		String respMessage = wechatService.coreService(request);
+		// 响应消息
+		PrintWriter out = response.getWriter();
+		out.print(respMessage);
+		out.close();
 	}
 
 
@@ -109,7 +108,7 @@ public class WeixinController{
 		ViewButton button = new ViewButton();
 		button.setName("首页");
 		button.setType("view");
-		button.setUrl("http://crell.nat123.net");
+		button.setUrl("http://1520399my8.imwork.net");
 		secondButton[0] = button;
 		superButton.setSub_button(secondButton);
 		firstButton[0] = superButton;
@@ -120,12 +119,12 @@ public class WeixinController{
 		ViewButton button11 = new ViewButton();
 		button11.setName("注册");
 		button11.setType("view");
-		button11.setUrl("http://crell.nat123.net/register");
+		button11.setUrl("http://1520399my8.imwork.net/register");
 		secondButton1[0] = button11;
 		ViewButton button22 = new ViewButton();
 		button22.setName("我的");
 		button22.setType("view");
-		button22.setUrl("http://crell.nat123.net/my");
+		button22.setUrl("http://1520399my8.imwork.net/my");
 		secondButton1[1] = button22;
 		superButton1.setSub_button(secondButton1);
 		firstButton[1] = superButton1;
@@ -134,9 +133,9 @@ public class WeixinController{
 		superButton2.setName("关于");
 		Button[] secondButton2 = new Button[1];
 		ViewButton button2 = new ViewButton();
-		button2.setName("联系我们");
+		button2.setName("联系我");
 		button2.setType("view");
-		button2.setUrl("http://crell.nat123.net");
+		button2.setUrl("http://1520399my8.imwork.net/about");
 		secondButton2[0] = button2;
 		superButton2.setSub_button(secondButton2);
 		firstButton[2] = superButton2;
@@ -156,6 +155,28 @@ public class WeixinController{
 	public void getAutoreply(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		PrintWriter out = response.getWriter();
 		out.print(weixinUtil.getAutoreply());
+		out.close();
+		out = null;
+	}
+
+	/**
+	 * 群发消息
+	 */
+	@RequestMapping(value = {"/wechat/sendall"},method = RequestMethod.GET)
+	public void sendall(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		PrintWriter out = response.getWriter();
+
+		Message message = new Message();
+		Filter filter = new Filter();
+		filter.setIs_to_all(true);
+		Text text = new Text();
+		text.setContent("教你从零开始搭建一套前后端系统，赶紧联系我！");
+		message.setFilter(filter);
+		message.setText(text);
+		message.setMsgtype(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
+
+		JSONObject jsonObject = weixinUtil.sendall(JSON.toJSONString(message));
+		out.print(jsonObject.get("errcode") + ":" + jsonObject.get("errmsg"));
 		out.close();
 		out = null;
 	}

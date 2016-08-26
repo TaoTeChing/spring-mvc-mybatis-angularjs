@@ -1,5 +1,5 @@
 CREATE DATABASE `db_tdct` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
+use db_tdct;
 CREATE TABLE `tuser` (
   `userId` int NOT NULL AUTO_INCREMENT, ##用户ID
   `userName` varchar(45) NOT NULL, ##用户名(email)

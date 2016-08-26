@@ -8,7 +8,12 @@ import com.crell.core.dto.Page;
 import com.crell.core.dto.ParamsBody;
 import com.crell.core.dto.ReturnBody;
 import com.crell.core.util.ParamsBodyUtil;
+import com.crell.weixin.model.Photo;
+import com.crell.weixin.model.Signature;
+import com.crell.weixin.util.WeixinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,6 +28,10 @@ public class TestController extends AbstractController {
 
     @Autowired
     TestSer testSer;
+
+    @Autowired
+    @Qualifier("weixinUtil")
+    private WeixinUtil weixinUtil;
 
     @RequestMapping(value = {"/test"},method = RequestMethod.GET)
     public ModelAndView test(HttpServletRequest request){
@@ -81,6 +90,27 @@ public class TestController extends AbstractController {
         list.add(returnBody1);
         map.put("list", list);
         return new ModelAndView("test.vm",map);
+    }
+
+    @RequestMapping(value = {"/jssdkTest"},method = RequestMethod.GET)
+    public ModelAndView jssdkTest(HttpServletRequest request, Model model) throws Exception {
+        Signature signature = weixinUtil.getJssdkSign(request);
+        Photo photo = new Photo();
+
+        model.addAttribute("signature", signature);
+        model.addAttribute("photo", photo);
+        return new ModelAndView("jssdkTest.jsp");
+    }
+
+    @RequestMapping(value = {"/jssdkTest/upImg"}, method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnBody uploadOutStock(String weight) {
+        ReturnBody returnbody = new ReturnBody();
+
+        returnbody.setStatus(ResponseState.SUCCESS);
+        returnbody.setData(weight);
+
+        return returnbody;
     }
 
     @RequestMapping(value = {"/pushTest"},method = RequestMethod.GET)

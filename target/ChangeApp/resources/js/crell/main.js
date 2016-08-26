@@ -9,7 +9,7 @@ var app = angular.module('mainApp', ['ngRoute'])
     window.addEventListener('load', function () {
         FastClick.attach(document.body);
     }, false);
-    
+
     BaseDataService.getAppData().success(function(obj){
         $rootScope.domain = obj.data.domain;
     });

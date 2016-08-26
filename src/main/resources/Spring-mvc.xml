@@ -12,11 +12,17 @@
     <!-- 兼容velocity -->
     <bean id="viewResolver" class="com.crell.core.mvc.CompatibleResolver">
         <property name="defaultViewResolver" ref="htmlViewResolver"/>
-        <property name="viewResolverKey">
+        <!--<property name="viewResolverKey">
             <value>.vm</value>
         </property>
         <property name="viewResolverValue">
             <ref bean="velocityViewResolver"/>
+        </property>-->
+        <property name="viewResolverKey">
+            <value>.jsp</value>
+        </property>
+        <property name="viewResolverValue">
+            <ref bean="jspViewResolver"/>
         </property>
     </bean>
 
@@ -25,6 +31,11 @@
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="prefix" value="/view/" />
         <property name="suffix" value=".html" />
+    </bean>
+
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/view/jsp/"/>
     </bean>
 
     <bean id="velocityConfigurer"

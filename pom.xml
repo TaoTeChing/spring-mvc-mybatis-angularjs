@@ -218,6 +218,13 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Xml数据导出导入 -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.9</version>
+        </dependency>
     </dependencies>
 
     <build>

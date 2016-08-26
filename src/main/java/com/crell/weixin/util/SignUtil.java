@@ -39,6 +39,26 @@ public class SignUtil {
 		return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
 	}
 
+	public static String getJssdkSign(String url, String noncestr, String jsapi_ticket, String timestamp) {
+		//获取sign
+		String sign = null;
+		String content = "jsapi_ticket=" + jsapi_ticket +
+				"&noncestr=" + noncestr +
+				"&timestamp=" + timestamp +
+				"&url=" + url;
+
+		MessageDigest md = null;
+
+		try {
+			md = MessageDigest.getInstance("SHA-1");
+			byte[] digest = md.digest(content.getBytes());
+			sign = byteToStr(digest);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return sign;
+	}
+
 	/**
 	 * 将字节数组转换为十六进制字符串
 	 * 
