@@ -19,6 +19,14 @@ var app = angular.module('mainApp', ['ngRoute'])
  */
 .factory('statusInterceptor', ['$q','$location',function($q,$location) {
     var statusInterceptor = {
+        request: function (request) {
+            // Header - Token
+            request.headers = request.headers || {};
+            if ($.cookie('token')) {
+                request.headers.Authorization = 'Bearer ' + $.cookie('token');
+            }
+            return request;
+        },
         response: function(response) {
             var deferred = $q.defer();
             if(response.data.status == Status.ERROR){//系统错误

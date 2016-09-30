@@ -2,6 +2,7 @@ package com.crell.core.dto;
 
 import com.crell.common.model.Business;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,17 @@ public class Page<T> {
 	private List<T> results;//返回结果集
 
 	private Map<String, Object> params = new HashMap<String, Object>();
+
+	public Page() {
+		super();
+	}
+
+	public Page(HttpServletRequest request) {
+		String pageNo = request.getParameter("pageNo");
+		String pageSize = request.getParameter("pageSize");
+		this.setPageNo(Integer.parseInt(pageNo));
+		this.setPageSize(Integer.parseInt(pageSize));
+	}
 
 	public int getPageNo() {
 		return pageNo;

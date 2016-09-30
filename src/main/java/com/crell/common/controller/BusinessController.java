@@ -23,18 +23,17 @@ import java.util.Map;
  * Created by crell on 2015/12/18.
  */
 @RestController
+@RequestMapping(value = "/business")
 public class BusinessController extends AbstractController {
 
     @Autowired
     BusinessSer businessSer;
 
-    @RequestMapping(value = {"/business/list"},method = RequestMethod.POST)
+    @RequestMapping(value = {"getBusinessList"},method = RequestMethod.GET)
     @ResponseBody
-    public ReturnBody getBusinessList(@RequestBody ParamsBody paramsBody,HttpServletRequest request){
-        String headerToken = request.getHeader("token");
-
+    public ReturnBody getBusinessList(HttpServletRequest request){
         ReturnBody rbody = new ReturnBody();
-        Page page = businessSer.getBusinessList(paramsBody.getBody(), paramsBody.getPage());
+        Page page = businessSer.getBusinessList(new Page(request));
         List<Business> businessList = page.getResults();
 
         rbody.setStatus(ResponseState.SUCCESS);
@@ -44,9 +43,9 @@ public class BusinessController extends AbstractController {
         return rbody;
     }
 
-    @RequestMapping(value = {"/business/{businessId}/list"},method = RequestMethod.POST)
+    @RequestMapping(value = {"{businessId}"},method = RequestMethod.GET)
     @ResponseBody
-    public ReturnBody getBusinessById(@RequestBody ParamsBody paramsBody,@PathVariable("businessId") String businessId,HttpServletRequest request){
+    public ReturnBody getBusinessById(@PathVariable("businessId") String businessId,HttpServletRequest request){
         ReturnBody rbody = new ReturnBody();
         Business business = businessSer.getBusinessById(businessId);
 
@@ -56,7 +55,7 @@ public class BusinessController extends AbstractController {
         return rbody;
     }
 
-    @RequestMapping(value = {"/business"},method = RequestMethod.POST)
+    @RequestMapping(value = {"addBusiness"},method = RequestMethod.POST)
     @NotNull(value = "gameName",user = true)
     @ResponseBody
     public ReturnBody add(@RequestBody ParamsBody paramsBody,HttpServletRequest request) throws Exception {

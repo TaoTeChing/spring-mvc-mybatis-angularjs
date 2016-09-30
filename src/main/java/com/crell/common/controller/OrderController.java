@@ -26,6 +26,7 @@ public class OrderController extends AbstractController {
         ReturnBody rbody = new ReturnBody();
         Map<String, Object> body = paramsBody.getBody();
 
+        String Authorization = request.getHeader("Authorization");
         rbody.setStatus(ResponseState.SUCCESS);
         return rbody;
     }

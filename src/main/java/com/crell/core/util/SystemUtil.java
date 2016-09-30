@@ -19,5 +19,18 @@ public class SystemUtil {
     public static User getUser(){
         return (User)local.get();
     }
+
+    public static String getToken(String authorization){
+        String usertoken = "";
+        String[] parts = authorization.split(" ");
+        if(parts.length == 2){
+            String scheme = parts[0];
+            String credentials = parts[1];
+            if("Bearer".equals(scheme)){
+                usertoken = credentials;
+            }
+        }
+        return usertoken;
+    }
     
 }

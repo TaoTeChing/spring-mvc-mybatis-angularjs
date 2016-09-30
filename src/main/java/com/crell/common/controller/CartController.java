@@ -10,6 +10,7 @@ import com.crell.core.constant.ResponseState;
 import com.crell.core.controller.AbstractController;
 import com.crell.core.dto.ParamsBody;
 import com.crell.core.dto.ReturnBody;
+import com.crell.core.util.SystemUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,8 @@ public class CartController extends AbstractController {
         ReturnBody rbody = new ReturnBody();
         Map params = paramsBody.getBody();
         String businessId = String.valueOf(params.get("businessId"));
-        String token = paramsBody.getToken();
+        String authorization = request.getHeader("Authorization");
+        String token = SystemUtil.getToken(authorization);
 
         User user = userSer.selectByToken(token);
 
@@ -45,13 +47,14 @@ public class CartController extends AbstractController {
         return rbody;
     }
 
-    @RequestMapping(value = {"/cart/list"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/cart"},method = RequestMethod.GET)
     @ResponseBody
     @NotNull(value = "",user = true)
-    public ReturnBody getCart(@RequestBody ParamsBody paramsBody,HttpServletRequest request){
+    public ReturnBody getCart(HttpServletRequest request){
         ReturnBody rbody = new ReturnBody();
 
-        String token = paramsBody.getToken();
+        String authorization = request.getHeader("Authorization");
+        String token = SystemUtil.getToken(authorization);
         User user = userSer.selectByToken(token);
 
         List<Cart> cartList = cartSer.getCart(user.getUserId());

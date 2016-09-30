@@ -6,6 +6,7 @@ import com.crell.core.constant.ResponseState;
 import com.crell.core.dto.ParamsBody;
 import com.crell.core.dto.ReturnBody;
 import com.crell.core.util.LogUtil;
+import com.crell.core.util.SystemUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,6 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -47,10 +49,13 @@ public class RequestAspect {
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         Object[] args = pjp.getArgs();
         ParamsBody paramsBody = null;
+        HttpServletRequest request = null;
         Map<String,Object> params = null;
         for (int j = 0; j < args.length; j++) {
             if(args[j] instanceof ParamsBody){
                 paramsBody = (ParamsBody)args[j];
+            }else if(args[j] instanceof HttpServletRequest){
+                request = (HttpServletRequest)args[j];
             }
         }
 
@@ -77,19 +82,22 @@ public class RequestAspect {
                 ReturnBody returnbody = new ReturnBody();
 
                 if(user){
-                    if(StringUtils.isEmpty(paramsBody.getToken())){
+                    String authorization = request.getHeader("Authorization");
+                    if(StringUtils.isEmpty(authorization)){
                         returnbody.setStatus(ResponseState.INVALID_TOKEN);
-                        returnbody.setMsg( "入参token为空");
-                        LogUtil.error(method.getName() + "入参token为空");
+                        returnbody.setMsg( "Authorization 为空");
+                        LogUtil.error(method.getName() + "Authorization 为空");
                         return returnbody;
-                    }else if(StringUtils.isEmpty(paramsBody.getTimestamp())){
+                    }
+                    String usertoken = SystemUtil.getToken(authorization);
+                    if(StringUtils.isEmpty(usertoken)){
                         returnbody.setStatus(ResponseState.INVALID_TOKEN);
-                        returnbody.setMsg( "入参timestamp为空");
-                        LogUtil.error(method.getName() + "入参timestamp为空");
+                        returnbody.setMsg( "token为空");
+                        LogUtil.error(method.getName() + "token为空");
                         return returnbody;
                     }else{
                         BoundHashOperations<String, String, String> userToken = redis.boundHashOps("userToken");
-                        String token = userToken.get(paramsBody.getToken());
+                        String token = userToken.get(usertoken);
                         if(StringUtils.isEmpty(token)){
                             returnbody.setStatus(ResponseState.INVALID_TOKEN);
                             returnbody.setMsg( "无效token");
@@ -97,7 +105,7 @@ public class RequestAspect {
                             return returnbody;
                         }else{
                             long token_time = Long.parseLong(token.split(",")[1]);
-                            long timestamp = paramsBody.getTimestamp();
+                            long timestamp = System.currentTimeMillis();
                             if(timestamp > token_time){
                                 returnbody.setStatus(ResponseState.INVALID_TOKEN);
                                 returnbody.setMsg( "token过期");

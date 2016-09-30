@@ -16,7 +16,7 @@ public interface BusinessSer {
 
     Boolean del(String businessId);
 
-    Page getBusinessList(Map<String, Object> body, Page page);
+    Page getBusinessList(Page page);
 
     Business getBusinessById(String businessId);
 }

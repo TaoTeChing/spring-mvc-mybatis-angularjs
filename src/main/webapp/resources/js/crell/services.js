@@ -89,7 +89,7 @@ app.factory('BaseDataService',['BaseService',function(BaseService){
 .factory("BusinessService",['BaseService',function(BaseService){
     return{
         getBusinessList : function(condition,page){
-            return BaseService.get('/ajax/business',condition,page);
+            return BaseService.get('/ajax/business/getBusinessList',page);
         },
         getBusiness : function(businessId){
             return BaseService.get('/ajax/business/'+businessId);

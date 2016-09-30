@@ -32,8 +32,7 @@ public class BusinessSerImpl implements BusinessSer {
         return businessMapper.del(businessId);
     }
 
-    public Page getBusinessList(Map<String, Object> body, Page page) {
-        page.setParams(body);
+    public Page getBusinessList(Page page) {
         List<Business> results = businessMapper.getBusinessList(page);
         page.setResults(results);
         return page;

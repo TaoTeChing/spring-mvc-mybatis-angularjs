@@ -8,4 +8,6 @@ package com.crell.core.constant;
  */
 public class Context {
     public static final String USER = "loginUser";
+
+    public static final String SECRET = "crell!QAZ%RDX@#$";
 }

@@ -33,7 +33,7 @@ public class BaseDataController extends AbstractController {
         return  returnBody;
     }
 
-    @RequestMapping(value = {"/appData/list"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/appData"},method = RequestMethod.GET)
     @ResponseBody
     public ReturnBody getAppData(){
 

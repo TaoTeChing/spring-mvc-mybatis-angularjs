@@ -3,6 +3,7 @@ package com.crell.common.controller;
 import com.crell.common.model.User;
 import com.crell.common.service.UserSer;
 import com.crell.core.annotation.NotNull;
+import com.crell.core.constant.Context;
 import com.crell.core.constant.ResponseState;
 import com.crell.core.controller.AbstractController;
 import com.crell.core.dto.ParamsBody;
@@ -10,14 +11,17 @@ import com.crell.core.dto.ReturnBody;
 import com.crell.core.util.EncryptUtil;
 import com.crell.core.util.IpUtil;
 import com.crell.core.util.LogUtil;
+import com.crell.core.util.SystemUtil;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by crell on 2016/1/17.
@@ -44,8 +48,12 @@ public class LoginController extends AbstractController {
                 rbody.setStatus(ResponseState.FAILED);
                 rbody.setMsg("密码错误！");
             }else{
-                String token = UUID.randomUUID().toString();
-                user.setToken(token);
+                String compactJws = Jwts.builder()
+                        .setSubject(user.getUserName())
+                        .signWith(SignatureAlgorithm.HS512, Context.SECRET)
+                        .compact();
+//                String token = UUID.randomUUID().toString();
+                user.setToken(compactJws);
                 user.setIp(IpUtil.getIpAddr(request));
                 user.setLastLoginDate(new Date());
                 user.setPassword("");
@@ -71,7 +79,9 @@ public class LoginController extends AbstractController {
     public ReturnBody logoff(@RequestBody ParamsBody paramsBody,HttpServletRequest request){
         ReturnBody rbody = new ReturnBody();
 
-        userSer.logout(paramsBody.getToken());
+        String authorization = request.getHeader("Authorization");
+        String token = SystemUtil.getToken(authorization);
+        userSer.logout(token);
         rbody.setStatus(ResponseState.SUCCESS);
         return rbody;
     }
@@ -89,7 +99,8 @@ public class LoginController extends AbstractController {
 
         //Map<String, String> cookieParam = ParameterUtil.cookiesToMap(request.getCookies());
         User user = null;
-        String token = paramsBody.getToken();
+        String authorization = request.getHeader("Authorization");
+        String token = SystemUtil.getToken(authorization);
 
         user = userSer.selectByToken(token);
         if (user != null) {
